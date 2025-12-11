@@ -226,8 +226,18 @@
         .ritual-666 { border-color: var(--c-mystic); background: rgba(106, 90, 205, 0.05); } 
         .ritual-666 span { color: var(--c-mystic) !important; }
 
-        .sound-btn { position: fixed; top: 15px; right: 15px; width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.1); display: flex; justify-content: center; align-items: center; z-index: 300; color: #888; background: rgba(255,255,255,0.5); backdrop-filter: blur(5px); }
-        .sound-btn.on { color: var(--c-gold-dim); border-color: var(--c-gold); background: #fff; box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); }
+        .sound-btn { 
+            width: 36px; height: 36px; border-radius: 50%; 
+            border: 1px solid rgba(212, 175, 55, 0.5); /* Soft gold border */
+            display: flex; justify-content: center; align-items: center; 
+            color: #888; background: rgba(255,255,255,0.6); 
+            cursor: pointer; margin-right: 12px;
+            transition: all 0.2s;
+        }
+        .sound-btn.on { 
+            color: var(--c-gold-dim); border-color: var(--c-gold); 
+            background: #fff; box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); 
+        }
         
         #bonus-counter { 
             position: absolute; top: 0; left: 0; right: 0; height: 62px;
@@ -271,7 +281,6 @@
     <div class="vignette" id="main-vignette"></div>
     <canvas id="mana-canvas"></canvas>
     <div id="flash-layer"></div>
-    <div id="sound-toggle" class="sound-btn" onclick="toggleAudio(event)">♪</div>
 
     <div class="app-layout" id="app-layout">
         <div class="header-bar" onclick="vibe('light'); playUISound(); openModal('wallet')">
@@ -279,7 +288,10 @@
                 <div class="currency-icon">👁️</div>
                 <div class="text-[#b8860b] font-mono font-bold text-lg">★ <span id="balance">0</span></div>
             </div>
-            <button onclick="event.stopPropagation(); vibe('light'); playUISound(); openModal('deposit')" class="deposit-btn-small">+ ADD</button>
+            <div class="flex items-center">
+                <div id="sound-toggle" class="sound-btn" onclick="toggleAudio(event)">♪</div>
+                <button onclick="event.stopPropagation(); vibe('light'); playUISound(); openModal('deposit')" class="deposit-btn-small">+ ADD</button>
+            </div>
         </div>
 
         <div class="ticker-tape">
