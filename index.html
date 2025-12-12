@@ -144,6 +144,7 @@
     <canvas id="mana-canvas"></canvas>
     <div id="flash-layer"></div>
 
+    <!-- GATES CLOSED OVERLAY (SERVER OFFLINE) -->
     <div id="gates-closed-overlay" class="modal-overlay" style="background: #050010; z-index: 1000; display: none;">
         <div class="flex flex-col items-center justify-center h-full p-6 text-center animate-fade-in">
             <div class="text-6xl mb-6 opacity-80" style="filter: drop-shadow(0 0 15px #d4af37);">⛩️</div>
@@ -162,6 +163,7 @@
 
     <div class="app-layout" id="app-layout">
         <div class="header-bar">
+            <!-- Balance & Privacy Toggle -->
             <div class="currency-badge" onclick="vibe('light'); playUISound(); openModal('wallet')">
                 <div class="currency-icon">👁️</div>
                 <div class="balance-col">
@@ -170,10 +172,13 @@
                 </div>
             </div>
             <div class="flex items-center gap-3">
+                <!-- DEMO/REAL Toggle -->
                 <button id="demo-mode-toggle" class="demo-toggle-btn real-mode" onclick="event.stopPropagation(); toggleDemoMode()">REAL</button>
 
+                <!-- Sound Toggle -->
                 <div id="sound-toggle" class="sound-btn" onclick="toggleAudio(event)">♪</div>
                 
+                <!-- Add Funds -->
                 <button onclick="event.stopPropagation(); vibe('light'); playUISound(); openModal('deposit')" class="add-funds-btn">+ ADD</button>
             </div>
         </div>
@@ -233,6 +238,7 @@
         </div>
     </div>
 
+    <!-- WALLET MODAL -->
     <div id="modal-wallet" class="modal-overlay" onclick="closeAllModals(event)">
         <div class="modal-box">
             <h3 style="margin:0 0 15px 0; color:var(--c-gold-dim); font-size:1.4rem;">THE VAULT</h3>
@@ -260,7 +266,7 @@
                     <div class="ticket-row"><span>Date</span><strong id="t-date">...</strong></div>
                 </div>
                 <div class="text-[9px] text-gray-400 text-center mb-4">Wait time up to 24h. Cannot be cancelled.</div>
-                <button onclick="sendTicketToAdmin()" class="w-full bg-[#6a5acd] text-white py-3 rounded-xl font-bold text-sm shadow-md mb-2">SEND TICKET TO ADMIN</button>
+                <button onclick="sendTicketToAdmin()" class="w-full bg-[#6a5acd] text-white py-3 rounded-xl font-bold text-sm shadow-md mb-2">CONTACT SUPPORT</button>
             </div>
             <div id="wallet-actions">
                 <div class="bg-[#f0f8ff] text-[#6a5acd] border border-[#6a5acd] py-3 rounded-xl font-bold text-sm cursor-pointer mb-2" onclick="vibe('light'); openModal('deposit')">ADD FUNDS</div>
@@ -283,6 +289,7 @@
         </div>
     </div>
 
+    <!-- INVOICE MODAL (Real Payments Only) -->
     <div id="modal-invoice" class="modal-overlay" onclick="closeAllModals(event)">
         <div class="modal-box" style="background: #fff; border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
             <div class="flex flex-col items-center mb-6">
@@ -296,7 +303,7 @@
             <div class="flex justify-between items-center mb-6">
                 <span class="text-gray-500 text-sm">Total</span><span id="invoice-cost" class="font-bold text-[#40a7e3] text-xl">$0.00</span>
             </div>
-            <div class="text-center text-xs text-gray-400 mb-4" id="invoice-status-text">Creating Invoice...</div>
+            <div class="text-center text-xs text-gray-400 mb-4">Redirecting to Telegram Payment...</div>
             <div onclick="closeAllModals()" class="text-center mt-2 text-gray-400 text-xs font-bold cursor-pointer hover:text-gray-600">CANCEL</div>
         </div>
     </div>
@@ -387,22 +394,21 @@
         }
 
         async function fetchUserState() {
-            // STRICT ISOLATION: If Demo, NEVER fetch from server
             if (state.isDemo) {
                 const demoBal = localStorage.getItem('janus_demo_balance');
                 if (demoBal) state.balance = parseInt(demoBal);
                 else if (state.balance === 0) state.balance = 1000;
-                
                 document.getElementById('gates-closed-overlay').style.display = 'none'; 
                 updateUI();
-                return; 
+                return;
             }
 
             const userId = tg.initDataUnsafe?.user?.id || 0;
             try {
                 const controller = new AbortController();
-                const id = setTimeout(() => controller.abort(), 10000); 
+                const id = setTimeout(() => controller.abort(), 3000); // 3 sec timeout
 
+                // ADDED HEADERS FOR NGROK & CORS
                 const res = await fetch(`${BACKEND_URL}/api/slot/user?user_id=${userId}`, { 
                     signal: controller.signal,
                     headers: {
@@ -437,14 +443,11 @@
             state.isDemo = !state.isDemo;
             
             if (state.isDemo) {
-                // Initialize/Load Demo Locally
                 const demoBal = localStorage.getItem('janus_demo_balance');
                 state.balance = demoBal ? parseInt(demoBal) : 1000;
                 state.wagerCurrent = 0; state.wagerRequired = 0; state.activeWithdrawal = null;
-                // ALERT REMOVED HERE. Replaced with status text update.
-                document.getElementById('status-text').innerText = "DEMO MODE";
+                alert("Демо-режим активирован. Баланс: 1000★ ($10). Вывод недоступен.");
             } else {
-                // Switch to Real - Reset and Fetch from Server
                 state.balance = 0; state.wagerCurrent = 0;
                 const savedWithdrawal = localStorage.getItem('janus_pending_withdrawal');
                 if(savedWithdrawal) state.activeWithdrawal = JSON.parse(savedWithdrawal);
@@ -535,6 +538,7 @@
                 statusText.innerText = "Divine Realm"; statusText.style.color = "#6a5acd";
             }
 
+            // Wager Logic
             let target = state.wagerRequired > 0 ? state.wagerRequired : 1;
             const wPct = state.wagerRequired > 0 ? Math.min(100, Math.floor((state.wagerCurrent / target) * 100)) : 100;
             document.getElementById('wager-bar').style.width = `${wPct}%`;
@@ -570,37 +574,22 @@
         let pendingInvoiceAmount = 0; let pendingInvoicePrice = 0;
 
         function addStars(v, priceOverride){ 
-            // STRICT DEMO ISOLATION FOR DEPOSIT
-            if (state.isDemo) {
-                state.balance += v;
-                saveState();
-                updateUI();
-                vibe('success');
-                alert(`[DEMO MODE] Added ${v} fake stars. No charge.`);
-                closeAllModals();
-                return;
-            }
-
-            // Real Mode Logic
+            if (state.isDemo) { alert(`[DEMO] Deposit $${priceOverride} simulated.`); return; }
             pendingInvoiceAmount = v; pendingInvoicePrice = priceOverride;
             document.querySelectorAll('.modal-overlay').forEach(el=>el.classList.remove('active')); 
             const cost = priceOverride.toFixed(2);
             document.getElementById('invoice-desc').innerText = `Pack: ${v} Stars`;
             document.getElementById('invoice-cost').innerText = `$${cost}`;
-            
-            document.getElementById('invoice-status-text').innerText = "Creating InvoiceLink...";
             setTimeout(() => { openModal('invoice'); }, 50);
-
-            payInvoice();
         }
 
         async function payInvoice() {
-            if (state.isDemo) return; // Double guard
-
             if (!tg.isVersionAtLeast('6.0')) { alert("Update Telegram!"); return; }
             
+            // Server call to create Invoice Link
             try {
                 const userId = tg.initDataUnsafe?.user?.id || 0;
+                // ADDED HEADER
                 const res = await fetch(`${BACKEND_URL}/api/slot/invoice`, {
                     method: 'POST',
                     headers: { 
@@ -613,30 +602,23 @@
                 const data = await res.json();
                 
                 if (data.invoice_link) {
-                    document.getElementById('invoice-status-text').innerText = "Opening Telegram Payment...";
-
-                    setTimeout(() => {
-                         document.querySelectorAll('.modal-overlay').forEach(el=>el.classList.remove('active')); 
-                    }, 500);
-
                     tg.openInvoice(data.invoice_link, (status) => {
+                        // Optimistic UI update or wait for polling
                         if (status === 'paid') {
+                             // Force fetch state from server after delay (webhook processing)
                              setTimeout(fetchUserState, 2500); 
                              blood(pendingInvoiceAmount, 'rain_heavy'); vibe('success'); audio.playWinSound(false);
                              alert("✅ Payment successful! Balance updating...");
-                        } else if (status === 'failed') {
-                            alert("❌ Payment Failed or Cancelled");
-                        }
+                        } else if (status === 'failed') alert("❌ Failed");
                         pendingInvoiceAmount = 0;
                     });
+                    document.querySelectorAll('.modal-overlay').forEach(el=>el.classList.remove('active')); 
                 } else {
                     alert("Error creating invoice: " + (data.error || "Unknown"));
-                    document.querySelectorAll('.modal-overlay').forEach(el=>el.classList.remove('active')); 
                 }
             } catch (e) {
                 console.error(e);
                 alert("Server connection error");
-                document.querySelectorAll('.modal-overlay').forEach(el=>el.classList.remove('active')); 
             }
         }
 
@@ -652,11 +634,9 @@
         }
 
         async function processWithdraw() {
-            if(state.isDemo) return alert("Withdraw unavailable in Demo.");
-
             const addr = document.getElementById('withdraw-addr').value;
             const amt = parseInt(document.getElementById('withdraw-amt').value);
-            
+            if(state.isDemo) return alert("Demo Mode.");
             if(!addr||addr.length<10) return alert("Invalid Wallet");
             if(!amt||amt<=0) return alert("Invalid Amount");
             if(amt>state.balance) return alert("Insufficient funds");
@@ -683,9 +663,11 @@
                     const data = await res.json();
                     state.balance = data.balance;
                     
+                    // Wager reset handled by server, we just update local view
                     state.wagerCurrent = 0;
                     state.wagerRequired = 0; 
                     
+                    // Create local ticket view
                     state.activeWithdrawal = {
                         user: `@${username}`, wallet: addr, amount: amt, 
                         fee: Math.max(10, Math.floor(amt*0.05)), 
@@ -716,11 +698,8 @@
             vibe('heavy'); closeAllModals();
             if(state.balance < cost) return alert(`Need ${cost} Stars`);
             
-            // STRICT DEMO ISOLATION FOR BONUS
-            if (state.isDemo) {
-                state.balance -= cost;
-                saveState();
-            } else {
+            // Server Sync for Purchase
+            if (!state.isDemo) {
                 const userId = tg.initDataUnsafe?.user?.id || 0;
                 try {
                     const res = await fetch(`${BACKEND_URL}/api/slot/buy_bonus`, {
@@ -732,8 +711,12 @@
                         body: JSON.stringify({user_id: userId, cost: cost})
                     });
                     if (!res.ok) return alert("Server Error");
-                    state.balance -= cost; 
+                    state.balance -= cost; // Optimistic update
+                    // Server handles wager increment internally
                 } catch(e) { return alert("Connection Error"); }
+            } else {
+                state.balance -= cost;
+                // Wager does not increase in Demo for bonus buy (optional)
             }
             
             updateUI();
@@ -757,7 +740,8 @@
 
             if(!state.purchasingBonus && !state.bonusMode){
                 if(state.balance < totalBet) { clearTimeout(failSafe); return openModal('deposit'); }
-                state.balance -= totalBet; 
+                state.balance -= totalBet; // Optimistic
+                // Server sync happens after spin calculation below
             }
             updateUI(); state.spinning=true;
 
@@ -881,37 +865,38 @@
                 
                 // --- SYNC WITH SERVER ---
                 if (!state.isDemo && !state.purchasingBonus && !state.bonusMode) {
-                      const userId = tg.initDataUnsafe?.user?.id || 0;
-                      // STRICT ISOLATION: Only call server if NOT Demo
-                      try {
-                          const res = await fetch(`${BACKEND_URL}/api/slot/sync`, {
-                              method: 'POST',
-                              headers: {
-                                  'Content-Type': 'application/json',
-                                  'ngrok-skip-browser-warning': 'true'
-                              },
-                              body: JSON.stringify({user_id: userId, bet: totalBet, win: totalRoundWin})
-                          });
-                          if(res.ok) {
-                              const d = await res.json();
-                              state.balance = d.stars; 
-                          }
-                      } catch(e) { console.error("Sync fail", e); }
+                     const userId = tg.initDataUnsafe?.user?.id || 0;
+                     // Only sync standard spins to deduct/add
+                     try {
+                         const res = await fetch(`${BACKEND_URL}/api/slot/sync`, {
+                             method: 'POST',
+                             headers: {
+                                 'Content-Type': 'application/json',
+                                 'ngrok-skip-browser-warning': 'true'
+                             },
+                             body: JSON.stringify({user_id: userId, bet: totalBet, win: totalRoundWin})
+                         });
+                         if(res.ok) {
+                             const d = await res.json();
+                             state.balance = d.stars; // Truth comes from server
+                         }
+                     } catch(e) { console.error("Sync fail", e); }
                 } else if (state.isDemo) {
-                      state.balance += totalRoundWin;
-                      saveState();
+                     state.balance += totalRoundWin;
                 } else if (state.bonusMode) {
-                      state.balance += totalRoundWin; 
-                      state.totalWin += totalRoundWin;
-                      if(state.isDemo) saveState();
+                     // In bonus mode, bets are free, but wins are real. Sync wins at end or accumulate.
+                     // Simple implementation:
+                     state.balance += totalRoundWin; // Accumulate locally for now
+                     state.totalWin += totalRoundWin;
                 }
 
                 if(totalRoundWin > 0){
                     isWin = true;
+                    // Visuals
                     shakeScreen(); vibe('success');
                     let ratio = totalRoundWin / (state.base * (state.playMode===27?5:state.playMode));
                     if(ratio > 5) flashScreen();
-                    
+                    if(ratio >= 50) recordBigWin(totalRoundWin, Math.floor(ratio));
                     let bloodAmount = ratio * 10; 
                     audio.playWinSound(ratio > 10);
 
@@ -921,28 +906,24 @@
                         blood(bloodAmount, 'splat'); showWin(totalRoundWin, "HARVESTED", false); 
                     }
                     
+                    // Highlight
                     document.querySelectorAll('.symbol-box').forEach(el => el.classList.add('dimmed'));
                     winningNodes.forEach(node => {
                         strips[node.c].children[node.r].classList.remove('dimmed');
                         strips[node.c].children[node.r].classList.add('winner');
                     });
-                } else { 
-                    // NO WIN - UNLOCK SPINNER HERE
-                    state.spinning=false; updateUI(); 
-                }
+                } else { state.spinning=false; updateUI(); }
 
-                if(state.bonusMode && !isWin){ 
-                      state.bonusSpins--;
-                      if(state.bonusSpins>0) setTimeout(spin,800); else endBonus();
+                if(state.bonusMode && !isWin){ // Just continue if no win in bonus
+                     state.bonusSpins--;
+                     if(state.bonusSpins>0) setTimeout(spin,800); else endBonus();
                 } else if (state.bonusMode && isWin) {
-                      state.bonusSpins--;
+                     state.bonusSpins--;
+                     // Wait for user to close win modal if big win, or auto continue?
+                     // Current logic: closeWin() triggers next spin if bonusMode
                 }
 
-            } catch(e){ 
-                console.error(e); 
-                state.spinning=false; // FAILSAFE UNLOCK
-                updateUI(); 
-            }
+            } catch(e){ console.error(e); state.spinning=false; updateUI(); }
         }
 
         function showWin(amount, title, isFree) {
@@ -994,8 +975,8 @@
         function adjustH(){const h=document.querySelector('.reels-container').clientHeight/3; document.querySelectorAll('.symbol-box').forEach(e=>e.style.height=`${h}px`);}
         window.addEventListener('resize',adjustH); setTimeout(adjustH,100);
         
-        loadState(); 
-        fetchUserState(); 
+        loadState(); // Restore withdrawal ticket if any
+        fetchUserState(); // Sync immediately on load
     </script>
 </body>
 </html>
