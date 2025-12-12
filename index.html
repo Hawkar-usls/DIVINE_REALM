@@ -250,6 +250,13 @@
                 <div class="h-px bg-gray-200 w-full mb-2"></div>
                 <div class="flex justify-between items-center text-xs text-gray-500"><span>USDT (TRC-20)</span><span id="vault-usdt" class="font-bold">$0.00</span></div>
             </div>
+            
+            <!-- SAVED WALLET FIELD -->
+            <div class="mb-2">
+                <div class="text-[10px] text-gray-400 uppercase mb-1">Your Wallet (TRC-20)</div>
+                <input type="text" id="saved-wallet" class="wallet-input" placeholder="Enter & Save Address" onchange="saveWalletAddr(this.value)" />
+            </div>
+
             <div class="mb-4" id="wager-area">
                 <div class="flex justify-between text-[9px] uppercase tracking-wider text-gray-400 mb-1"><span>Withdrawal Wager</span><span id="wager-txt">0%</span></div>
                 <div class="h-2 bg-gray-200 rounded-full overflow-hidden"><div id="wager-bar" class="h-full bg-[#6a5acd] w-0 transition-all duration-500"></div></div>
@@ -266,7 +273,7 @@
                     <div class="ticket-row"><span>Date</span><strong id="t-date">...</strong></div>
                 </div>
                 <div class="text-[9px] text-gray-400 text-center mb-4">Wait time up to 24h. Cannot be cancelled.</div>
-                <button onclick="sendTicketToAdmin()" class="w-full bg-[#6a5acd] text-white py-3 rounded-xl font-bold text-sm shadow-md mb-2">CONTACT SUPPORT</button>
+                <!-- REMOVED SEND BUTTON as bot sends it automatically -->
             </div>
             <div id="wallet-actions">
                 <div class="bg-[#f0f8ff] text-[#6a5acd] border border-[#6a5acd] py-3 rounded-xl font-bold text-sm cursor-pointer mb-2" onclick="vibe('light'); openModal('deposit')">ADD FUNDS</div>
@@ -274,7 +281,9 @@
             </div>
             <div id="withdraw-form" style="display:none;">
                 <div class="text-left text-xs font-bold text-gray-500 mb-1 pl-1">Wallet (TRC-20)</div>
-                <input type="text" id="withdraw-addr" class="wallet-input" placeholder="T..." />
+                <input type="text" id="withdraw-addr" class="wallet-input" placeholder="T..." readonly />
+                <div class="text-[9px] text-right text-blue-400 mb-2 cursor-pointer" onclick="document.getElementById('withdraw-addr').readOnly=false; document.getElementById('withdraw-addr').focus()">Edit</div>
+
                 <div class="text-left text-xs font-bold text-gray-500 mb-1 pl-1">Amount (Stars)</div>
                 <input type="number" id="withdraw-amt" class="wallet-input" placeholder="Min 100" oninput="calcWithdrawPreview()" />
                 <div class="text-[10px] text-gray-400 mb-3 text-left">
@@ -370,6 +379,7 @@
             base:1, spinning:false, 
             bonusMode:false, bonusSpins:0, totalWin:0, purchasingBonus:false, pendingSpins:0, 
             ritualTier:0, weather:'none', privacy:false, activeWithdrawal: null,
+            savedWallet: localStorage.getItem('janus_saved_wallet') || "",
             isDemo: JSON.parse(localStorage.getItem('janus_is_demo') || 'false')
         };
 
@@ -378,6 +388,9 @@
             const savedWithdrawal = localStorage.getItem('janus_pending_withdrawal');
             if (savedWithdrawal) {
                 state.activeWithdrawal = JSON.parse(savedWithdrawal);
+            }
+            if(state.savedWallet) {
+                document.getElementById('saved-wallet').value = state.savedWallet;
             }
         }
         
@@ -391,6 +404,11 @@
             if (state.isDemo) {
                  localStorage.setItem('janus_demo_balance', state.balance);
             }
+        }
+
+        function saveWalletAddr(val) {
+            state.savedWallet = val;
+            localStorage.setItem('janus_saved_wallet', val);
         }
 
         async function fetchUserState() {
@@ -408,7 +426,6 @@
                 const controller = new AbortController();
                 const id = setTimeout(() => controller.abort(), 3000); // 3 sec timeout
 
-                // ADDED HEADERS FOR NGROK & CORS
                 const res = await fetch(`${BACKEND_URL}/api/slot/user?user_id=${userId}`, { 
                     signal: controller.signal,
                     headers: {
@@ -562,6 +579,18 @@
                 if (!state.isDemo) actionsArea.style.display = 'block'; else actionsArea.style.display = 'none';
                 if (state.isDemo) { document.getElementById('wallet-actions').style.display = 'block'; document.getElementById('withdraw-button').style.display = 'none'; }
             }
+
+            if(state.bonusMode){
+                document.getElementById('bonus-counter').classList.add('active');
+                const el = document.getElementById('bonus-total-display');
+                if (el.innerText != state.totalWin) { el.innerText = state.totalWin; el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); }
+                document.getElementById('status-text').innerText=`BLESSING ${state.ritualTier} [${state.bonusSpins}]`;
+                statusText.style.color='#00ced1';
+            } else if (!state.isDemo) {
+                document.getElementById('bonus-counter').classList.remove('active');
+                statusText.innerText="Divine Realm";
+                statusText.style.color='#6a5acd';
+            }
         }
 
         function togglePrivacy() { state.privacy = !state.privacy; document.getElementById('eye-icon').innerText = state.privacy ? '🙈' : '👁️'; updateUI(); }
@@ -622,7 +651,14 @@
             }
         }
 
-        function showWithdrawForm() { if(state.isDemo||state.activeWithdrawal)return; document.getElementById('wallet-actions').style.display='none'; document.getElementById('withdraw-form').style.display='block'; }
+        function showWithdrawForm() { 
+            if(state.isDemo||state.activeWithdrawal)return; 
+            document.getElementById('wallet-actions').style.display='none'; 
+            document.getElementById('withdraw-form').style.display='block'; 
+            
+            // Auto-fill wallet if saved
+            if(state.savedWallet) document.getElementById('withdraw-addr').value = state.savedWallet;
+        }
         function hideWithdrawForm() { document.getElementById('wallet-actions').style.display='block'; document.getElementById('withdraw-form').style.display='none'; }
         
         function calcWithdrawPreview() {
@@ -685,13 +721,6 @@
             }
         }
 
-        function sendTicketToAdmin() {
-            if(!state.activeWithdrawal) return;
-            const msg = `🎟 WITHDRAWAL TICKET\n------------------\nUSER: ${state.activeWithdrawal.user}\nWALLET: ${state.activeWithdrawal.wallet}\nAMOUNT: ${state.activeWithdrawal.amount} Stars\nNET PAYOUT: $${state.activeWithdrawal.netUsdt} (USDT TRC-20)\nDATE: ${state.activeWithdrawal.date}`;
-            const url = `https://t.me/${ADMIN_USERNAME}?text=${encodeURIComponent(msg)}`;
-            tg.openTelegramLink(url);
-        }
-
         function initBuyBonus(){ vibe('light'); openModal('buy'); }
         
         async function confirmBuyBonus(cost, tier){
@@ -711,12 +740,12 @@
                         body: JSON.stringify({user_id: userId, cost: cost})
                     });
                     if (!res.ok) return alert("Server Error");
-                    state.balance -= cost; // Optimistic update
-                    // Server handles wager increment internally
+                    // Server handles wager logic
+                    state.balance -= cost; 
+                    if(state.wagerRequired > state.wagerCurrent) state.wagerCurrent += cost; 
                 } catch(e) { return alert("Connection Error"); }
             } else {
                 state.balance -= cost;
-                // Wager does not increase in Demo for bonus buy (optional)
             }
             
             updateUI();
@@ -725,10 +754,19 @@
         }
 
         async function spin(){
-            if(state.spinning)return;
+            if(state.spinning) return;
             vibe('medium'); audio.playSpinSound();
+            
+            // Visual Setup
             if(state.bonusMode) setWeather('bonus'); else setWeather('none');
-            const failSafe = setTimeout(() => { if(state.spinning) { state.spinning = false; updateUI(); } }, 4000);
+            
+            // Only set spinning TRUE if we successfully start
+            // Logic moved inside specific blocks or kept here if generic.
+            // Let's lock it:
+            state.spinning = true; 
+            updateUI();
+
+            const failSafe = setTimeout(() => { if(state.spinning) { state.spinning = false; updateUI(); } }, 5000);
 
             document.getElementById('win-overlay').classList.remove('active');
             document.querySelectorAll('.reel-col').forEach(el => el.classList.remove('teaser'));
@@ -738,12 +776,18 @@
             let totalBet = state.bet * mult;
             let loseChance = state.isDemo ? 0.75 : 0.85;
 
+            // DEDUCT BALANCE (If normal spin)
             if(!state.purchasingBonus && !state.bonusMode){
-                if(state.balance < totalBet) { clearTimeout(failSafe); return openModal('deposit'); }
+                if(state.balance < totalBet) { 
+                    clearTimeout(failSafe); 
+                    state.spinning = false; 
+                    updateUI();
+                    return openModal('deposit'); 
+                }
                 state.balance -= totalBet; // Optimistic
-                // Server sync happens after spin calculation below
+                if(!state.isDemo && state.wagerCurrent < state.wagerRequired) state.wagerCurrent += totalBet;
             }
-            updateUI(); state.spinning=true;
+            updateUI(); 
 
             try {
                 let outcomeReels = [];
@@ -815,7 +859,7 @@
                         let extra = Math.floor(Math.random() * 3) + 4; 
                         state.bonusSpins += extra;
                         blood(30, 'splat'); showWin(`+${extra}`, "RETRIGGER", true);
-                        setTimeout(() => { closeWin(); state.spinning=false; updateUI(); }, 1500);
+                        // No spin unlock here, retrigger handles it
                     } else {
                         state.pendingSpins=10; 
                         state.purchasingBonus=true; 
@@ -829,10 +873,10 @@
                             state.spinning=false; updateUI(); setTimeout(spin,800);
                         },2000);
                     }
-                    return; // Retrigger/Bonus entry handles spinning state
+                    return; 
                 }
 
-                // PAYLINES/WAYS
+                // PAYLINES Logic
                 if(state.playMode === 27) {
                     let r0 = outcomeReels[0]; let r1 = outcomeReels[1]; let r2 = outcomeReels[2];
                     let distinct = [...new Set(r0.map(s=>s.id))];
@@ -863,36 +907,30 @@
                     });
                 }
                 
-                // --- SYNC WITH SERVER ---
+                // --- SERVER SYNC ---
                 if (!state.isDemo && !state.purchasingBonus && !state.bonusMode) {
                      const userId = tg.initDataUnsafe?.user?.id || 0;
-                     // Only sync standard spins to deduct/add
                      try {
                          const res = await fetch(`${BACKEND_URL}/api/slot/sync`, {
                              method: 'POST',
-                             headers: {
-                                 'Content-Type': 'application/json',
-                                 'ngrok-skip-browser-warning': 'true'
-                             },
+                             headers: {'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true'},
                              body: JSON.stringify({user_id: userId, bet: totalBet, win: totalRoundWin})
                          });
                          if(res.ok) {
                              const d = await res.json();
-                             state.balance = d.stars; // Truth comes from server
+                             state.balance = d.stars; 
                          }
                      } catch(e) { console.error("Sync fail", e); }
                 } else if (state.isDemo) {
                      state.balance += totalRoundWin;
+                     saveState();
                 } else if (state.bonusMode) {
-                     // In bonus mode, bets are free, but wins are real. Sync wins at end or accumulate.
-                     // Simple implementation:
-                     state.balance += totalRoundWin; // Accumulate locally for now
+                     state.balance += totalRoundWin; // Accumulate local
                      state.totalWin += totalRoundWin;
                 }
 
                 if(totalRoundWin > 0){
                     isWin = true;
-                    // Visuals
                     shakeScreen(); vibe('success');
                     let ratio = totalRoundWin / (state.base * (state.playMode===27?5:state.playMode));
                     if(ratio > 5) flashScreen();
@@ -901,26 +939,41 @@
                     audio.playWinSound(ratio > 10);
 
                     if(state.bonusMode){ 
-                        blood(bloodAmount, 'splat'); state.spinning=false; updateUI(); 
+                        blood(bloodAmount, 'splat'); 
+                        updateUI(); 
+                        // IMPORTANT: For bonus mode, we do NOT stop spinning here, handled by loop check below
                     } else { 
-                        blood(bloodAmount, 'splat'); showWin(totalRoundWin, "HARVESTED", false); 
+                        blood(bloodAmount, 'splat'); 
+                        showWin(totalRoundWin, "HARVESTED", false); 
+                        // For normal mode, showWin keeps spinner locked until closed
                     }
                     
-                    // Highlight
                     document.querySelectorAll('.symbol-box').forEach(el => el.classList.add('dimmed'));
                     winningNodes.forEach(node => {
                         strips[node.c].children[node.r].classList.remove('dimmed');
                         strips[node.c].children[node.r].classList.add('winner');
                     });
-                } else { state.spinning=false; updateUI(); }
+                } else { 
+                    // NO WIN
+                    if(!state.bonusMode) {
+                        state.spinning = false; 
+                        updateUI(); 
+                    }
+                }
 
-                if(state.bonusMode && !isWin){ // Just continue if no win in bonus
+                // --- BONUS LOOP CHECK ---
+                if(state.bonusMode){
                      state.bonusSpins--;
-                     if(state.bonusSpins>0) setTimeout(spin,800); else endBonus();
-                } else if (state.bonusMode && isWin) {
-                     state.bonusSpins--;
-                     // Wait for user to close win modal if big win, or auto continue?
-                     // Current logic: closeWin() triggers next spin if bonusMode
+                     updateUI();
+                     
+                     // We ignore isWin because we want flow to continue, only 'showWin' pauses flow if not Free
+                     // Since Bonus Wins don't show modal (just counter update), we can proceed.
+                     
+                     if(state.bonusSpins > 0) {
+                         setTimeout(spin, 1000); 
+                     } else {
+                         setTimeout(endBonus, 1000);
+                     }
                 }
 
             } catch(e){ console.error(e); state.spinning=false; updateUI(); }
@@ -931,22 +984,16 @@
             document.getElementById('win-title').innerText = title;
             const ol = document.getElementById('win-overlay');
             ol.classList.add('active');
-            if(!isFree && amount < 50) {
+            // Auto close small wins in normal mode
+            if(!isFree && amount < 50 && !state.bonusMode) {
                  setTimeout(()=>{ if(ol.classList.contains('active')) closeWin(); }, 1500);
             }
         }
 
-        // --- CRITICAL FIX: SOFT LOCK PREVENTION ---
         function closeWin(){
             document.getElementById('win-overlay').classList.remove('active');
-            
-            if(state.bonusMode && state.bonusSpins > 0 && !state.spinning) {
-                setTimeout(spin, 500);
-            } else if (state.bonusMode && state.bonusSpins <= 0) {
-                endBonus();
-            } else {
-                // NORMAL MODE: UNLOCK SPINNER AFTER WIN MODAL CLOSES
-                state.spinning = false; 
+            if(!state.bonusMode) {
+                state.spinning = false;
                 updateUI();
             }
         }
@@ -955,6 +1002,7 @@
             state.bonusMode = false; setWeather('none'); 
             showWin(state.totalWin, "RITUAL COMPLETE", false);
             
+            // Final Sync for bonus round total
             if(!state.isDemo) {
                  fetch(`${BACKEND_URL}/api/slot/sync`, {
                       method: 'POST',
@@ -975,8 +1023,8 @@
         function adjustH(){const h=document.querySelector('.reels-container').clientHeight/3; document.querySelectorAll('.symbol-box').forEach(e=>e.style.height=`${h}px`);}
         window.addEventListener('resize',adjustH); setTimeout(adjustH,100);
         
-        loadState(); // Restore withdrawal ticket if any
-        fetchUserState(); // Sync immediately on load
+        loadState(); 
+        fetchUserState(); 
     </script>
 </body>
 </html>
