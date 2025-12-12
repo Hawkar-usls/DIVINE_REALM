@@ -335,7 +335,6 @@
 
     <script>
         // --- CONFIGURATION ---
-        // Если у тебя белый IP, убедись, что этот адрес верен и доступен извне!
         const BACKEND_URL = "https://supperless-yoshiko-noneruditely.ngrok-free.dev"; 
         
         let tg = window.Telegram?.WebApp;
@@ -369,7 +368,6 @@
 
         // --- LOAD STATE ---
         function loadState() {
-            // Load Active Withdrawal from LocalStorage to persist pending ticket between reloads
             const savedWithdrawal = localStorage.getItem('janus_pending_withdrawal');
             if (savedWithdrawal) {
                 state.activeWithdrawal = JSON.parse(savedWithdrawal);
@@ -377,7 +375,6 @@
         }
         
         function saveState() {
-            // Save local demo state and pending tickets
             localStorage.setItem('janus_is_demo', state.isDemo);
             if (state.activeWithdrawal) {
                 localStorage.setItem('janus_pending_withdrawal', JSON.stringify(state.activeWithdrawal));
@@ -390,24 +387,22 @@
         }
 
         async function fetchUserState() {
+            // STRICT ISOLATION: If Demo, NEVER fetch from server
             if (state.isDemo) {
-                // Load Demo Balance from LocalStorage or default
                 const demoBal = localStorage.getItem('janus_demo_balance');
                 if (demoBal) state.balance = parseInt(demoBal);
                 else if (state.balance === 0) state.balance = 1000;
                 
-                document.getElementById('gates-closed-overlay').style.display = 'none'; // Ensure closed on demo
+                document.getElementById('gates-closed-overlay').style.display = 'none'; 
                 updateUI();
-                return;
+                return; 
             }
 
             const userId = tg.initDataUnsafe?.user?.id || 0;
             try {
-                // Timeout check for Gates Closed Logic
                 const controller = new AbortController();
-                const id = setTimeout(() => controller.abort(), 10000); // 10 sec timeout
+                const id = setTimeout(() => controller.abort(), 10000); 
 
-                // ADDED HEADER: ngrok-skip-browser-warning
                 const res = await fetch(`${BACKEND_URL}/api/slot/user?user_id=${userId}`, { 
                     signal: controller.signal,
                     headers: {
@@ -423,14 +418,13 @@
                     state.wagerCurrent = data.wager_current;
                     state.wagerRequired = data.wager_required;
                     
-                    document.getElementById('gates-closed-overlay').style.display = 'none'; // Open Gates
+                    document.getElementById('gates-closed-overlay').style.display = 'none'; 
                     updateUI();
                 } else {
                     throw new Error("Server error");
                 }
             } catch (e) {
                 console.error("Connection error:", e);
-                // Only show Gates Closed if not in Demo mode and not just toggling
                 if (!state.isDemo) {
                       document.getElementById('gates-closed-overlay').style.display = 'flex';
                 }
@@ -443,15 +437,14 @@
             state.isDemo = !state.isDemo;
             
             if (state.isDemo) {
-                // Initialize/Load Demo
+                // Initialize/Load Demo Locally
                 const demoBal = localStorage.getItem('janus_demo_balance');
                 state.balance = demoBal ? parseInt(demoBal) : 1000;
                 state.wagerCurrent = 0; state.wagerRequired = 0; state.activeWithdrawal = null;
                 alert("Демо-режим активирован. Баланс: 1000★ ($10). Вывод недоступен.");
             } else {
-                // Return to real mode and fetch from server
+                // Switch to Real - Reset and Fetch from Server
                 state.balance = 0; state.wagerCurrent = 0;
-                // Reload ticket if exists
                 const savedWithdrawal = localStorage.getItem('janus_pending_withdrawal');
                 if(savedWithdrawal) state.activeWithdrawal = JSON.parse(savedWithdrawal);
                 fetchUserState();
@@ -541,7 +534,6 @@
                 statusText.innerText = "Divine Realm"; statusText.style.color = "#6a5acd";
             }
 
-            // Wager Logic
             let target = state.wagerRequired > 0 ? state.wagerRequired : 1;
             const wPct = state.wagerRequired > 0 ? Math.min(100, Math.floor((state.wagerCurrent / target) * 100)) : 100;
             document.getElementById('wager-bar').style.width = `${wPct}%`;
@@ -577,28 +569,37 @@
         let pendingInvoiceAmount = 0; let pendingInvoicePrice = 0;
 
         function addStars(v, priceOverride){ 
-            if (state.isDemo) { alert(`[DEMO] Deposit $${priceOverride} simulated.`); return; }
+            // STRICT DEMO ISOLATION FOR DEPOSIT
+            if (state.isDemo) {
+                state.balance += v;
+                saveState();
+                updateUI();
+                vibe('success');
+                alert(`[DEMO MODE] Added ${v} fake stars. No charge.`);
+                closeAllModals();
+                return;
+            }
+
+            // Real Mode Logic
             pendingInvoiceAmount = v; pendingInvoicePrice = priceOverride;
             document.querySelectorAll('.modal-overlay').forEach(el=>el.classList.remove('active')); 
             const cost = priceOverride.toFixed(2);
             document.getElementById('invoice-desc').innerText = `Pack: ${v} Stars`;
             document.getElementById('invoice-cost').innerText = `$${cost}`;
             
-            // Open the invoice modal to show "Loading" state
             document.getElementById('invoice-status-text').innerText = "Creating InvoiceLink...";
             setTimeout(() => { openModal('invoice'); }, 50);
 
-            // ACTUAL CALL TO BACKEND
             payInvoice();
         }
 
         async function payInvoice() {
+            if (state.isDemo) return; // Double guard
+
             if (!tg.isVersionAtLeast('6.0')) { alert("Update Telegram!"); return; }
             
-            // Server call to create Invoice Link
             try {
                 const userId = tg.initDataUnsafe?.user?.id || 0;
-                // ADDED HEADER
                 const res = await fetch(`${BACKEND_URL}/api/slot/invoice`, {
                     method: 'POST',
                     headers: { 
@@ -611,18 +612,14 @@
                 const data = await res.json();
                 
                 if (data.invoice_link) {
-                    // Update Status text to prompt user check
                     document.getElementById('invoice-status-text').innerText = "Opening Telegram Payment...";
 
-                    // Close our HTML modal because Telegram native modal will take over
                     setTimeout(() => {
                          document.querySelectorAll('.modal-overlay').forEach(el=>el.classList.remove('active')); 
                     }, 500);
 
                     tg.openInvoice(data.invoice_link, (status) => {
-                        // Optimistic UI update or wait for polling
                         if (status === 'paid') {
-                             // Force fetch state from server after delay (webhook processing)
                              setTimeout(fetchUserState, 2500); 
                              blood(pendingInvoiceAmount, 'rain_heavy'); vibe('success'); audio.playWinSound(false);
                              alert("✅ Payment successful! Balance updating...");
@@ -654,9 +651,11 @@
         }
 
         async function processWithdraw() {
+            if(state.isDemo) return alert("Withdraw unavailable in Demo.");
+
             const addr = document.getElementById('withdraw-addr').value;
             const amt = parseInt(document.getElementById('withdraw-amt').value);
-            if(state.isDemo) return alert("Demo Mode.");
+            
             if(!addr||addr.length<10) return alert("Invalid Wallet");
             if(!amt||amt<=0) return alert("Invalid Amount");
             if(amt>state.balance) return alert("Insufficient funds");
@@ -665,7 +664,6 @@
             const username = tg.initDataUnsafe?.user?.username || "Guest";
 
             try {
-                // ADDED HEADER
                 const res = await fetch(`${BACKEND_URL}/api/slot/withdraw`, {
                     method: 'POST',
                     headers: { 
@@ -684,11 +682,9 @@
                     const data = await res.json();
                     state.balance = data.balance;
                     
-                    // Wager reset handled by server, we just update local view
                     state.wagerCurrent = 0;
                     state.wagerRequired = 0; 
                     
-                    // Create local ticket view
                     state.activeWithdrawal = {
                         user: `@${username}`, wallet: addr, amount: amt, 
                         fee: Math.max(10, Math.floor(amt*0.05)), 
@@ -719,11 +715,13 @@
             vibe('heavy'); closeAllModals();
             if(state.balance < cost) return alert(`Need ${cost} Stars`);
             
-            // Server Sync for Purchase
-            if (!state.isDemo) {
+            // STRICT DEMO ISOLATION FOR BONUS
+            if (state.isDemo) {
+                state.balance -= cost;
+                saveState();
+            } else {
                 const userId = tg.initDataUnsafe?.user?.id || 0;
                 try {
-                    // ADDED HEADER
                     const res = await fetch(`${BACKEND_URL}/api/slot/buy_bonus`, {
                         method: 'POST',
                         headers: {
@@ -733,11 +731,8 @@
                         body: JSON.stringify({user_id: userId, cost: cost})
                     });
                     if (!res.ok) return alert("Server Error");
-                    state.balance -= cost; // Optimistic update
-                    // Server handles wager increment internally
+                    state.balance -= cost; 
                 } catch(e) { return alert("Connection Error"); }
-            } else {
-                state.balance -= cost;
             }
             
             updateUI();
@@ -761,8 +756,7 @@
 
             if(!state.purchasingBonus && !state.bonusMode){
                 if(state.balance < totalBet) { clearTimeout(failSafe); return openModal('deposit'); }
-                state.balance -= totalBet; // Optimistic
-                // Server sync happens after spin calculation below
+                state.balance -= totalBet; 
             }
             updateUI(); state.spinning=true;
 
@@ -887,9 +881,8 @@
                 // --- SYNC WITH SERVER ---
                 if (!state.isDemo && !state.purchasingBonus && !state.bonusMode) {
                       const userId = tg.initDataUnsafe?.user?.id || 0;
-                      // Only sync standard spins to deduct/add
+                      // STRICT ISOLATION: Only call server if NOT Demo
                       try {
-                          // ADDED HEADER
                           const res = await fetch(`${BACKEND_URL}/api/slot/sync`, {
                               method: 'POST',
                               headers: {
@@ -900,25 +893,24 @@
                           });
                           if(res.ok) {
                               const d = await res.json();
-                              state.balance = d.stars; // Truth comes from server
+                              state.balance = d.stars; 
                           }
                       } catch(e) { console.error("Sync fail", e); }
                 } else if (state.isDemo) {
                       state.balance += totalRoundWin;
+                      saveState();
                 } else if (state.bonusMode) {
-                      // In bonus mode, bets are free, but wins are real. Sync wins at end or accumulate.
-                      // Simple implementation:
-                      state.balance += totalRoundWin; // Accumulate locally for now
+                      state.balance += totalRoundWin; 
                       state.totalWin += totalRoundWin;
+                      if(state.isDemo) saveState();
                 }
 
                 if(totalRoundWin > 0){
                     isWin = true;
-                    // Visuals
                     shakeScreen(); vibe('success');
                     let ratio = totalRoundWin / (state.base * (state.playMode===27?5:state.playMode));
                     if(ratio > 5) flashScreen();
-                    if(ratio >= 50) recordBigWin(totalRoundWin, Math.floor(ratio));
+                    
                     let bloodAmount = ratio * 10; 
                     audio.playWinSound(ratio > 10);
 
@@ -928,58 +920,64 @@
                         blood(bloodAmount, 'splat'); showWin(totalRoundWin, "HARVESTED", false); 
                     }
                     
-                    // Highlight
                     document.querySelectorAll('.symbol-box').forEach(el => el.classList.add('dimmed'));
                     winningNodes.forEach(node => {
                         strips[node.c].children[node.r].classList.remove('dimmed');
                         strips[node.c].children[node.r].classList.add('winner');
                     });
-                } else { state.spinning=false; updateUI(); }
+                } else { 
+                    // NO WIN - UNLOCK SPINNER HERE
+                    state.spinning=false; updateUI(); 
+                }
 
-                if(state.bonusMode && !isWin){ // Just continue if no win in bonus
+                if(state.bonusMode && !isWin){ 
                       state.bonusSpins--;
                       if(state.bonusSpins>0) setTimeout(spin,800); else endBonus();
                 } else if (state.bonusMode && isWin) {
                       state.bonusSpins--;
-                      // Wait for user to close win modal if big win, or auto continue?
-                      // Current logic: closeWin() triggers next spin if bonusMode
                 }
 
-            } catch(e){ console.error(e); state.spinning=false; updateUI(); }
+            } catch(e){ 
+                console.error(e); 
+                state.spinning=false; // FAILSAFE UNLOCK
+                updateUI(); 
+            }
         }
 
-        // Helpers for animation
         function showWin(amount, title, isFree) {
             document.getElementById('win-amount').innerText = amount;
             document.getElementById('win-title').innerText = title;
             const ol = document.getElementById('win-overlay');
             ol.classList.add('active');
-            // Auto close small wins
             if(!isFree && amount < 50) {
                  setTimeout(()=>{ if(ol.classList.contains('active')) closeWin(); }, 1500);
             }
         }
+
+        // --- CRITICAL FIX: SOFT LOCK PREVENTION ---
         function closeWin(){
             document.getElementById('win-overlay').classList.remove('active');
+            
             if(state.bonusMode && state.bonusSpins > 0 && !state.spinning) {
                 setTimeout(spin, 500);
             } else if (state.bonusMode && state.bonusSpins <= 0) {
                 endBonus();
+            } else {
+                // NORMAL MODE: UNLOCK SPINNER AFTER WIN MODAL CLOSES
+                state.spinning = false; 
+                updateUI();
             }
         }
+
         function endBonus(){
             state.bonusMode = false; setWeather('none'); 
             showWin(state.totalWin, "RITUAL COMPLETE", false);
-            // Sync final bonus win to server if needed, though we synced each spin locally. 
-            // Better practice: ONE sync at end of bonus, but for now we rely on local accumulation + spin sync logic if added later.
-            // Currently Bonus Spins are FREE locally, so no server deduction, but wins added. 
-            // We should ideally sync the Total Win at end of bonus:
+            
             if(!state.isDemo) {
-                 // Simple sync for bonus total
                  fetch(`${BACKEND_URL}/api/slot/sync`, {
                       method: 'POST',
                       headers: {'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true'},
-                      body: JSON.stringify({user_id: tg.initDataUnsafe?.user?.id, bet: 0, win: 0}) // Just to refresh balance
+                      body: JSON.stringify({user_id: tg.initDataUnsafe?.user?.id, bet: 0, win: 0}) 
                  }).then(r=>r.json()).then(d=>state.balance=d.stars);
             }
         }
@@ -995,8 +993,8 @@
         function adjustH(){const h=document.querySelector('.reels-container').clientHeight/3; document.querySelectorAll('.symbol-box').forEach(e=>e.style.height=`${h}px`);}
         window.addEventListener('resize',adjustH); setTimeout(adjustH,100);
         
-        loadState(); // Restore withdrawal ticket if any
-        fetchUserState(); // Sync immediately on load
+        loadState(); 
+        fetchUserState(); 
     </script>
 </body>
 </html>
