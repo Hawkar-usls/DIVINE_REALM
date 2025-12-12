@@ -441,7 +441,8 @@
                 const demoBal = localStorage.getItem('janus_demo_balance');
                 state.balance = demoBal ? parseInt(demoBal) : 1000;
                 state.wagerCurrent = 0; state.wagerRequired = 0; state.activeWithdrawal = null;
-                alert("Демо-режим активирован. Баланс: 1000★ ($10). Вывод недоступен.");
+                // ALERT REMOVED HERE. Replaced with status text update.
+                document.getElementById('status-text').innerText = "DEMO MODE";
             } else {
                 // Switch to Real - Reset and Fetch from Server
                 state.balance = 0; state.wagerCurrent = 0;
