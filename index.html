@@ -296,7 +296,7 @@
             <div class="flex justify-between items-center mb-6">
                 <span class="text-gray-500 text-sm">Total</span><span id="invoice-cost" class="font-bold text-[#40a7e3] text-xl">$0.00</span>
             </div>
-            <div class="text-center text-xs text-gray-400 mb-4">Opening Telegram Invoice...</div>
+            <div class="text-center text-xs text-gray-400 mb-4" id="invoice-status-text">Creating Invoice...</div>
             <div onclick="closeAllModals()" class="text-center mt-2 text-gray-400 text-xs font-bold cursor-pointer hover:text-gray-600">CANCEL</div>
         </div>
     </div>
@@ -583,7 +583,13 @@
             const cost = priceOverride.toFixed(2);
             document.getElementById('invoice-desc').innerText = `Pack: ${v} Stars`;
             document.getElementById('invoice-cost').innerText = `$${cost}`;
+            
+            // Open the invoice modal to show "Loading" state
+            document.getElementById('invoice-status-text').innerText = "Creating InvoiceLink...";
             setTimeout(() => { openModal('invoice'); }, 50);
+
+            // ACTUAL CALL TO BACKEND
+            payInvoice();
         }
 
         async function payInvoice() {
@@ -605,6 +611,14 @@
                 const data = await res.json();
                 
                 if (data.invoice_link) {
+                    // Update Status text to prompt user check
+                    document.getElementById('invoice-status-text').innerText = "Opening Telegram Payment...";
+
+                    // Close our HTML modal because Telegram native modal will take over
+                    setTimeout(() => {
+                         document.querySelectorAll('.modal-overlay').forEach(el=>el.classList.remove('active')); 
+                    }, 500);
+
                     tg.openInvoice(data.invoice_link, (status) => {
                         // Optimistic UI update or wait for polling
                         if (status === 'paid') {
@@ -612,16 +626,19 @@
                              setTimeout(fetchUserState, 2500); 
                              blood(pendingInvoiceAmount, 'rain_heavy'); vibe('success'); audio.playWinSound(false);
                              alert("✅ Payment successful! Balance updating...");
-                        } else if (status === 'failed') alert("❌ Failed");
+                        } else if (status === 'failed') {
+                            alert("❌ Payment Failed or Cancelled");
+                        }
                         pendingInvoiceAmount = 0;
                     });
-                    document.querySelectorAll('.modal-overlay').forEach(el=>el.classList.remove('active')); 
                 } else {
                     alert("Error creating invoice: " + (data.error || "Unknown"));
+                    document.querySelectorAll('.modal-overlay').forEach(el=>el.classList.remove('active')); 
                 }
             } catch (e) {
                 console.error(e);
                 alert("Server connection error");
+                document.querySelectorAll('.modal-overlay').forEach(el=>el.classList.remove('active')); 
             }
         }
 
@@ -869,30 +886,30 @@
                 
                 // --- SYNC WITH SERVER ---
                 if (!state.isDemo && !state.purchasingBonus && !state.bonusMode) {
-                     const userId = tg.initDataUnsafe?.user?.id || 0;
-                     // Only sync standard spins to deduct/add
-                     try {
-                         // ADDED HEADER
-                         const res = await fetch(`${BACKEND_URL}/api/slot/sync`, {
-                             method: 'POST',
-                             headers: {
-                                 'Content-Type': 'application/json',
-                                 'ngrok-skip-browser-warning': 'true'
-                             },
-                             body: JSON.stringify({user_id: userId, bet: totalBet, win: totalRoundWin})
-                         });
-                         if(res.ok) {
-                             const d = await res.json();
-                             state.balance = d.stars; // Truth comes from server
-                         }
-                     } catch(e) { console.error("Sync fail", e); }
+                      const userId = tg.initDataUnsafe?.user?.id || 0;
+                      // Only sync standard spins to deduct/add
+                      try {
+                          // ADDED HEADER
+                          const res = await fetch(`${BACKEND_URL}/api/slot/sync`, {
+                              method: 'POST',
+                              headers: {
+                                  'Content-Type': 'application/json',
+                                  'ngrok-skip-browser-warning': 'true'
+                              },
+                              body: JSON.stringify({user_id: userId, bet: totalBet, win: totalRoundWin})
+                          });
+                          if(res.ok) {
+                              const d = await res.json();
+                              state.balance = d.stars; // Truth comes from server
+                          }
+                      } catch(e) { console.error("Sync fail", e); }
                 } else if (state.isDemo) {
-                     state.balance += totalRoundWin;
+                      state.balance += totalRoundWin;
                 } else if (state.bonusMode) {
-                     // In bonus mode, bets are free, but wins are real. Sync wins at end or accumulate.
-                     // Simple implementation:
-                     state.balance += totalRoundWin; // Accumulate locally for now
-                     state.totalWin += totalRoundWin;
+                      // In bonus mode, bets are free, but wins are real. Sync wins at end or accumulate.
+                      // Simple implementation:
+                      state.balance += totalRoundWin; // Accumulate locally for now
+                      state.totalWin += totalRoundWin;
                 }
 
                 if(totalRoundWin > 0){
@@ -920,12 +937,12 @@
                 } else { state.spinning=false; updateUI(); }
 
                 if(state.bonusMode && !isWin){ // Just continue if no win in bonus
-                     state.bonusSpins--;
-                     if(state.bonusSpins>0) setTimeout(spin,800); else endBonus();
+                      state.bonusSpins--;
+                      if(state.bonusSpins>0) setTimeout(spin,800); else endBonus();
                 } else if (state.bonusMode && isWin) {
-                     state.bonusSpins--;
-                     // Wait for user to close win modal if big win, or auto continue?
-                     // Current logic: closeWin() triggers next spin if bonusMode
+                      state.bonusSpins--;
+                      // Wait for user to close win modal if big win, or auto continue?
+                      // Current logic: closeWin() triggers next spin if bonusMode
                 }
 
             } catch(e){ console.error(e); state.spinning=false; updateUI(); }
@@ -960,9 +977,9 @@
             if(!state.isDemo) {
                  // Simple sync for bonus total
                  fetch(`${BACKEND_URL}/api/slot/sync`, {
-                     method: 'POST',
-                     headers: {'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true'},
-                     body: JSON.stringify({user_id: tg.initDataUnsafe?.user?.id, bet: 0, win: 0}) // Just to refresh balance
+                      method: 'POST',
+                      headers: {'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true'},
+                      body: JSON.stringify({user_id: tg.initDataUnsafe?.user?.id, bet: 0, win: 0}) // Just to refresh balance
                  }).then(r=>r.json()).then(d=>state.balance=d.stars);
             }
         }
