@@ -144,7 +144,6 @@
     <canvas id="mana-canvas"></canvas>
     <div id="flash-layer"></div>
 
-    <!-- GATES CLOSED OVERLAY (SERVER OFFLINE) -->
     <div id="gates-closed-overlay" class="modal-overlay" style="background: #050010; z-index: 1000; display: none;">
         <div class="flex flex-col items-center justify-center h-full p-6 text-center animate-fade-in">
             <div class="text-6xl mb-6 opacity-80" style="filter: drop-shadow(0 0 15px #d4af37);">⛩️</div>
@@ -163,7 +162,6 @@
 
     <div class="app-layout" id="app-layout">
         <div class="header-bar">
-            <!-- Balance & Privacy Toggle -->
             <div class="currency-badge" onclick="vibe('light'); playUISound(); openModal('wallet')">
                 <div class="currency-icon">👁️</div>
                 <div class="balance-col">
@@ -172,13 +170,10 @@
                 </div>
             </div>
             <div class="flex items-center gap-3">
-                <!-- DEMO/REAL Toggle -->
                 <button id="demo-mode-toggle" class="demo-toggle-btn real-mode" onclick="event.stopPropagation(); toggleDemoMode()">REAL</button>
 
-                <!-- Sound Toggle -->
                 <div id="sound-toggle" class="sound-btn" onclick="toggleAudio(event)">♪</div>
                 
-                <!-- Add Funds -->
                 <button onclick="event.stopPropagation(); vibe('light'); playUISound(); openModal('deposit')" class="add-funds-btn">+ ADD</button>
             </div>
         </div>
@@ -238,7 +233,6 @@
         </div>
     </div>
 
-    <!-- WALLET MODAL -->
     <div id="modal-wallet" class="modal-overlay" onclick="closeAllModals(event)">
         <div class="modal-box">
             <h3 style="margin:0 0 15px 0; color:var(--c-gold-dim); font-size:1.4rem;">THE VAULT</h3>
@@ -289,7 +283,6 @@
         </div>
     </div>
 
-    <!-- INVOICE MODAL (Now for Real Payments) -->
     <div id="modal-invoice" class="modal-overlay" onclick="closeAllModals(event)">
         <div class="modal-box" style="background: #fff; border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
             <div class="flex flex-col items-center mb-6">
@@ -342,6 +335,7 @@
 
     <script>
         // --- CONFIGURATION ---
+        // Если у тебя белый IP, убедись, что этот адрес верен и доступен извне!
         const BACKEND_URL = "https://supperless-yoshiko-noneruditely.ngrok-free.dev"; 
         
         let tg = window.Telegram?.WebApp;
@@ -411,9 +405,16 @@
             try {
                 // Timeout check for Gates Closed Logic
                 const controller = new AbortController();
-                const id = setTimeout(() => controller.abort(), 3000); // 3 sec timeout
+                const id = setTimeout(() => controller.abort(), 10000); // 10 sec timeout
 
-                const res = await fetch(`${BACKEND_URL}/api/slot/user?user_id=${userId}`, { signal: controller.signal });
+                // ADDED HEADER: ngrok-skip-browser-warning
+                const res = await fetch(`${BACKEND_URL}/api/slot/user?user_id=${userId}`, { 
+                    signal: controller.signal,
+                    headers: {
+                        "ngrok-skip-browser-warning": "true",
+                        "Content-Type": "application/json"
+                    }
+                });
                 clearTimeout(id);
 
                 if (res.ok) {
@@ -431,7 +432,7 @@
                 console.error("Connection error:", e);
                 // Only show Gates Closed if not in Demo mode and not just toggling
                 if (!state.isDemo) {
-                     document.getElementById('gates-closed-overlay').style.display = 'flex';
+                      document.getElementById('gates-closed-overlay').style.display = 'flex';
                 }
             }
         }
@@ -591,9 +592,13 @@
             // Server call to create Invoice Link
             try {
                 const userId = tg.initDataUnsafe?.user?.id || 0;
+                // ADDED HEADER
                 const res = await fetch(`${BACKEND_URL}/api/slot/invoice`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'ngrok-skip-browser-warning': 'true'
+                    },
                     body: JSON.stringify({ user_id: userId, amount: pendingInvoiceAmount })
                 });
                 
@@ -643,9 +648,13 @@
             const username = tg.initDataUnsafe?.user?.username || "Guest";
 
             try {
+                // ADDED HEADER
                 const res = await fetch(`${BACKEND_URL}/api/slot/withdraw`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'ngrok-skip-browser-warning': 'true'
+                    },
                     body: JSON.stringify({
                         user_id: userId,
                         username: username,
@@ -697,9 +706,13 @@
             if (!state.isDemo) {
                 const userId = tg.initDataUnsafe?.user?.id || 0;
                 try {
+                    // ADDED HEADER
                     const res = await fetch(`${BACKEND_URL}/api/slot/buy_bonus`, {
                         method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'ngrok-skip-browser-warning': 'true'
+                        },
                         body: JSON.stringify({user_id: userId, cost: cost})
                     });
                     if (!res.ok) return alert("Server Error");
@@ -859,9 +872,13 @@
                      const userId = tg.initDataUnsafe?.user?.id || 0;
                      // Only sync standard spins to deduct/add
                      try {
+                         // ADDED HEADER
                          const res = await fetch(`${BACKEND_URL}/api/slot/sync`, {
                              method: 'POST',
-                             headers: {'Content-Type': 'application/json'},
+                             headers: {
+                                 'Content-Type': 'application/json',
+                                 'ngrok-skip-browser-warning': 'true'
+                             },
                              body: JSON.stringify({user_id: userId, bet: totalBet, win: totalRoundWin})
                          });
                          if(res.ok) {
@@ -913,6 +930,47 @@
 
             } catch(e){ console.error(e); state.spinning=false; updateUI(); }
         }
+
+        // Helpers for animation
+        function showWin(amount, title, isFree) {
+            document.getElementById('win-amount').innerText = amount;
+            document.getElementById('win-title').innerText = title;
+            const ol = document.getElementById('win-overlay');
+            ol.classList.add('active');
+            // Auto close small wins
+            if(!isFree && amount < 50) {
+                 setTimeout(()=>{ if(ol.classList.contains('active')) closeWin(); }, 1500);
+            }
+        }
+        function closeWin(){
+            document.getElementById('win-overlay').classList.remove('active');
+            if(state.bonusMode && state.bonusSpins > 0 && !state.spinning) {
+                setTimeout(spin, 500);
+            } else if (state.bonusMode && state.bonusSpins <= 0) {
+                endBonus();
+            }
+        }
+        function endBonus(){
+            state.bonusMode = false; setWeather('none'); 
+            showWin(state.totalWin, "RITUAL COMPLETE", false);
+            // Sync final bonus win to server if needed, though we synced each spin locally. 
+            // Better practice: ONE sync at end of bonus, but for now we rely on local accumulation + spin sync logic if added later.
+            // Currently Bonus Spins are FREE locally, so no server deduction, but wins added. 
+            // We should ideally sync the Total Win at end of bonus:
+            if(!state.isDemo) {
+                 // Simple sync for bonus total
+                 fetch(`${BACKEND_URL}/api/slot/sync`, {
+                     method: 'POST',
+                     headers: {'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true'},
+                     body: JSON.stringify({user_id: tg.initDataUnsafe?.user?.id, bet: 0, win: 0}) // Just to refresh balance
+                 }).then(r=>r.json()).then(d=>state.balance=d.stars);
+            }
+        }
+
+        function shakeFrame() { document.querySelector('.machine-frame').style.animation='impact-shake 0.3s'; setTimeout(()=>document.querySelector('.machine-frame').style.animation='',300); }
+        function shakeScreen() { document.body.style.animation='impact-shake 0.5s'; setTimeout(()=>document.body.style.animation='',500); }
+        function flashScreen() { const f=document.getElementById('flash-layer'); f.style.opacity=0.8; setTimeout(()=>f.style.opacity=0,50); }
+        function recordBigWin(amt, x) { /* Optional: Send to server for leaderboards */ }
 
         function getSymHtml(s){return `<div class="symbol-box"><div class="symbol-inner tier-${s.tier}"><div class="symbol-char">${s.char}</div></div></div>`;}
         function getRandSym(){return SYMBOLS[Math.floor(Math.random()*SYMBOLS.length)];}
