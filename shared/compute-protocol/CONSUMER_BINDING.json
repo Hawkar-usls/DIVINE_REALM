@@ -1,65 +1,26 @@
 {
-  "schema": "janus.compute-protocol.consumer-binding.v3",
+  "schema": "janus.compute-protocol.consumer-binding.v4",
   "protocol_id": "janus.welfare.compute-protocol",
-  "protocol_version": "0.2.0",
+  "protocol_version": "0.3.0",
   "routing_fabric_version": "0.1.0",
   "consumer": "Hawkar-usls/DIVINE_REALM",
-  "temporary_canonical_source": {
-    "repository": "Hawkar-usls/SSlot",
-    "branch": "welfare-first-v0.1",
-    "path": "shared/compute-protocol",
-    "extraction_target": "DEDICATED_NEUTRAL_REPOSITORY"
-  },
+  "temporary_canonical_source": {"repository": "Hawkar-usls/SSlot", "branch": "welfare-first-v0.1", "path": "shared/compute-protocol", "extraction_target": "DEDICATED_NEUTRAL_REPOSITORY"},
   "role": "SCIENCE_DEFAULT_AMORPHOUS_COMPUTE_ROUTER_SURFACE",
   "default_route_class": "SCIENCE",
   "allowed_route_classes": ["SCIENCE", "PUBLIC_GOOD", "MARKETPLACE", "TREASURY", "DATACENTER", "OPERATOR", "CUSTOM"],
-  "allowed_task_types": ["SCIENCE_WORK_UNIT", "ECONOMIC_COMPUTE_JOB", "POW_SHARE"],
-  "allowed_sinks": ["IMPACT_LEDGER", "PLAYER_COMPUTE_EARNINGS_LEDGER", "COMPUTE_TREASURY", "CONTRACT_DEFINED_AUDITED_SINK"],
+  "allowed_task_types": ["SCIENCE_WORK_UNIT", "GENERAL_COMPUTE_JOB", "ECONOMIC_COMPUTE_JOB", "POW_SHARE"],
+  "allowed_sinks": ["IMPACT_LEDGER", "GENERAL_COMPUTE_LEDGER", "PLAYER_COMPUTE_EARNINGS_LEDGER", "COMPUTE_TREASURY", "CONTRACT_DEFINED_AUDITED_SINK"],
   "provider_selection_authority": "SIGNED_SERVER_ROUTING_PLAN",
   "compute_only_mode_required": true,
   "game_surface_access": "READ_ONLY_STATUS_AND_USER_CONSENT_CONTROLS",
-  "forbidden_authority": [
-    "RNG",
-    "RTP",
-    "WIN_PROBABILITY",
-    "PAYOUT_MULTIPLIER",
-    "FREE_SPIN_ENTITLEMENT",
-    "BET_SIZE",
-    "PERSONAL_JACKPOT_WEIGHT",
-    "LOSS_REBATE",
-    "ROUTE_WEIGHT_FROM_GAME_EVENT"
-  ],
-  "science_default_boundary": {
-    "theme_is_default_not_lock_in": true,
-    "scientific_authority_belongs_to_workload_owner": true,
-    "real_scientific_requestor_required_for_science_claim": true,
-    "golem_is_scientific_authority": false
-  },
-  "consent_requirements": {
-    "explicit_opt_in": true,
-    "revocable_immediately": true,
-    "default_mode": "off",
-    "default_gpu": false,
-    "allow_on_battery_default": false,
-    "cpu_policy_target_percent_max": 30
-  },
-  "routing_policy": {
-    "basis": "CONSENT_DEVICE_POLICY_AND_PROVIDER_CAPACITY",
-    "spin_frequency_as_scheduler_input": false,
-    "game_outcome_as_scheduler_input": false,
-    "weighted_multi_provider_plans_allowed": true,
-    "fallback_only_to_preapproved_provider": true,
-    "fail_closed": true
-  },
-  "browser_boundary": {
-    "control_plane_only": true,
-    "provider_secrets_in_browser": false,
-    "wallet_private_material_in_browser": false,
-    "production_gateway_required": true
-  },
+  "forbidden_authority": ["RNG", "RTP", "WIN_PROBABILITY", "PAYOUT_MULTIPLIER", "FREE_SPIN_ENTITLEMENT", "BET_SIZE", "PERSONAL_JACKPOT_WEIGHT", "LOSS_REBATE", "ROUTE_WEIGHT_FROM_GAME_EVENT"],
+  "science_default_boundary": {"theme_is_default_not_lock_in": true, "scientific_authority_belongs_to_workload_owner": true, "real_scientific_requestor_required_for_science_claim": true, "golem_is_scientific_authority": false},
+  "consent_requirements": {"explicit_opt_in": true, "revocable_immediately": true, "default_mode": "off", "default_gpu": false, "allow_on_battery_default": false, "cpu_policy_target_percent_max": 30},
+  "routing_policy": {"basis": "CONSENT_DEVICE_POLICY_AND_PROVIDER_CAPACITY", "spin_frequency_as_scheduler_input": false, "game_outcome_as_scheduler_input": false, "weighted_multi_provider_plans_allowed": true, "fallback_only_to_preapproved_provider": true, "fail_closed": true},
+  "browser_boundary": {"control_plane_only": true, "provider_secrets_in_browser": false, "wallet_private_material_in_browser": false, "production_gateway_required": true},
   "proof_policy": {
     "unverified_receipt_has_value": false,
-    "production_proof_kinds": ["SCIENCE_UPSTREAM_RECEIPT", "ECONOMIC_UPSTREAM_RECEIPT", "GOLEM_PAYMENT_RECEIPT", "POOL_SHARE_ACCEPTANCE"],
+    "production_proof_kinds": ["SCIENCE_UPSTREAM_RECEIPT", "GENERAL_UPSTREAM_RECEIPT", "ECONOMIC_UPSTREAM_RECEIPT", "GOLEM_PAYMENT_RECEIPT", "POOL_SHARE_ACCEPTANCE"],
     "mock_proofs_allowed_in_production": false
   }
 }
