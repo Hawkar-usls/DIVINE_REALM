@@ -1,0 +1,93 @@
+{
+  "schema_id": "janus.welfare-first-gambling.v0.1",
+  "project": "DIVINE_REALM",
+  "role": "NARRATIVE_AND_IMPACT_SURFACE",
+  "status": "DESIGN_CONTRACT",
+  "real_money_deployment": "BLOCKED_PENDING_INDEPENDENT_REVIEW",
+  "inherits_shared_core_from": "SSlot/welfare-first-v0.1",
+  "prime_invariant": "Narrative and social-impact framing must never increase operator value by increasing player loss of control.",
+  "game_design": {
+    "autoplay": false,
+    "turbo_or_quick_spin": false,
+    "outcome_sensitive_reel_timing": false,
+    "engineered_near_miss": false,
+    "losses_disguised_as_wins": false,
+    "minimum_paid_round_interval_ms": 3000,
+    "player_must_initiate_each_paid_round": true,
+    "feature_buy_default_enabled": false,
+    "adaptive_rtp": false,
+    "personalized_rtp": false,
+    "personalized_volatility": false
+  },
+  "narrative_safety": {
+    "wager_as_sacrifice": false,
+    "loss_as_redemption": false,
+    "loss_as_charity": false,
+    "rng_as_prophecy_or_divine_judgement": false,
+    "spiritual_status_from_wager_volume": false,
+    "spiritual_status_from_losses": false,
+    "charitable_pressure_to_continue_play": false,
+    "risk_personalized_persuasion": false,
+    "theme_can_override_safety_core": false
+  },
+  "fairness": {
+    "published_paytable_required": true,
+    "published_theoretical_rtp_required": true,
+    "same_math_for_all_players_within_version_and_jurisdiction": true,
+    "cryptographically_secure_rng_required_for_production": true,
+    "rng_independent_of_balance_loss_history_risk_score_marketing_and_narrative_state": true,
+    "external_certification_required_for_real_money": true
+  },
+  "session_truth": {
+    "show_elapsed_time": true,
+    "show_total_staked": true,
+    "show_total_returned": true,
+    "show_net_position": true,
+    "celebrate_only_if_payout_gt_stake": true,
+    "break_even_is_not_a_win": true
+  },
+  "risk_response": {
+    "can_only_reduce_gambling_capability": true,
+    "permitted": [
+      "factual_session_summary",
+      "friction",
+      "forced_break",
+      "lower_limits",
+      "cooling_off",
+      "real_money_suspension",
+      "self_exclusion_support"
+    ],
+    "forbidden": [
+      "bonus",
+      "vip",
+      "deposit_prompt",
+      "higher_stake_prompt",
+      "lossback",
+      "reactivation",
+      "narrative_guilt",
+      "charity_guilt",
+      "spiritual_persuasion"
+    ]
+  },
+  "social_impact": {
+    "operator_funded": true,
+    "player_loss_is_not_described_as_a_donation": true,
+    "community_voting_power_cannot_depend_on_spend": true,
+    "gambling_advantage_for_charitable_preference": false,
+    "public_ledger_required": true,
+    "impact_total_cannot_be_used_as_deposit_or_continuation_prompt": true
+  },
+  "deployment_gates": [
+    "AGE_AND_IDENTITY",
+    "JURISDICTION_AND_LICENSE",
+    "PAYMENTS_AND_AML",
+    "SECURITY_REVIEW",
+    "RNG_AND_MATH_CERTIFICATION",
+    "RESPONSIBLE_GAMBLING_REVIEW",
+    "PRIVACY_AND_DATA_MINIMIZATION",
+    "ACCESSIBILITY",
+    "PUBLIC_IMPACT_LEDGER",
+    "NARRATIVE_COERCION_REVIEW"
+  ],
+  "fail_closed": true
+}
