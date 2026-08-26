@@ -1,0 +1,57 @@
+{
+  "schema_id": "janus.slot-legacy-migration.v0.1",
+  "project": "DIVINE_REALM",
+  "source": "index.html",
+  "status": "OPEN",
+  "gates": [
+    {
+      "id": "REMOVE_OUTCOME_SENSITIVE_TEASER",
+      "observed_pattern": "Legacy reel UI contains teaser styling and suspense mechanics inherited from the slot prototype.",
+      "required_state": "Reel timing, audio, haptics and narrative suspense are independent of near-win or near-bonus outcomes.",
+      "pass": false
+    },
+    {
+      "id": "REMOVE_AUTOMATIC_BONUS_SPINS",
+      "observed_pattern": "Bonus-mode architecture can continue rounds automatically.",
+      "required_state": "Every value-bearing round requires deliberate player initiation.",
+      "pass": false
+    },
+    {
+      "id": "DISABLE_FEATURE_BUY",
+      "observed_pattern": "Legacy UI includes a compact buy-feature control inherited from the slot design.",
+      "required_state": "Feature-buy is disabled in the baseline welfare-first build and cannot bypass shared risk/session gates.",
+      "pass": false
+    },
+    {
+      "id": "REMOVE_SPIRITUAL_GAMBLING_EQUIVALENCE",
+      "observed_pattern": "Mythic and celestial presentation is tightly coupled to gambling state and reward presentation.",
+      "required_state": "No paid action is described as sacrifice, blessing, redemption, destiny, divine judgement, charity, spiritual rank or moral progress.",
+      "pass": false
+    },
+    {
+      "id": "NARRATIVE_STATE_CANNOT_CHANGE_GAME_MATH",
+      "observed_pattern": "Narrative state and game state currently coexist in one single-file application.",
+      "required_state": "Theme/narrative state cannot alter RTP, RNG, volatility, eligibility, limits, risk decisions or accounting.",
+      "pass": false
+    },
+    {
+      "id": "SESSION_TRUTH_PANEL",
+      "observed_pattern": "Balance and stake are visible, but complete elapsed-time, total-staked, total-returned and net-session accounting is not the primary persistent truth surface.",
+      "required_state": "Persistent factual session truth remains visible above narrative persuasion.",
+      "pass": false
+    },
+    {
+      "id": "NO_IMPACT_AS_CONTINUATION_PROMPT",
+      "observed_pattern": "Future social-impact layer does not yet have an enforced separation from wagering UX.",
+      "required_state": "Impact totals and beneficiaries cannot be used to prompt deposit, increase stake or extend play.",
+      "pass": false
+    },
+    {
+      "id": "WELFARE_GATE_PRECEDES_NARRATIVE_AND_SPIN",
+      "observed_pattern": "Legacy game path lacks a unified shared safety decision surface.",
+      "required_state": "Eligibility/limits/self-exclusion/risk decision executes before any value-bearing round and before persuasive narrative feedback.",
+      "pass": false
+    }
+  ],
+  "release_rule": "REAL_MONEY_REMAINS_BLOCKED_UNTIL_ALL_GATES_PASS_AND_INDEPENDENT_NARRATIVE_COERCION_AND_RESPONSIBLE_GAMBLING_REVIEW_PASS"
+}
