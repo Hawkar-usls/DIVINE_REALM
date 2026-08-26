@@ -1,7 +1,7 @@
 {
-  "schema": "janus.compute-protocol.consumer-binding.v1",
+  "schema": "janus.compute-protocol.consumer-binding.v2",
   "protocol_id": "janus.welfare.compute-protocol",
-  "protocol_version": "0.1.0",
+  "protocol_version": "0.2.0",
   "consumer": "Hawkar-usls/DIVINE_REALM",
   "temporary_canonical_source": {
     "repository": "Hawkar-usls/SSlot",
@@ -11,6 +11,7 @@
   },
   "allowed_task_types": ["SCIENCE_WORK_UNIT"],
   "allowed_sink": "IMPACT_LEDGER",
+  "optional_provider_bridge": "GOLEM_WHEN_REAL_COMPATIBLE_SCIENTIFIC_REQUESTOR_EXISTS",
   "compute_only_mode_required": true,
   "game_surface_access": "READ_ONLY_STATUS",
   "forbidden_authority": [
@@ -30,6 +31,13 @@
     "default_gpu": false,
     "allow_on_battery_default": false,
     "cpu_policy_target_percent_max": 30
+  },
+  "golem_science_boundary": {
+    "golem_is_scientific_authority": false,
+    "real_scientific_requestor_required": true,
+    "browser_is_control_plane_only": true,
+    "yagna_app_key_in_browser": false,
+    "gameplay_frequency_must_not_schedule_more_science": true
   },
   "proof_policy": {
     "unverified_receipt_has_value": false,
