@@ -1,58 +1,57 @@
 <div align="center">
 
 # DIVINE_REALM
-### Interactive Gaming × Scientific/Public-Good Compute Gateway Prototype
+### Interactive Gaming × PLAYGRID Amorphous Compute Router
 
 ![Status](https://img.shields.io/badge/status-active%20prototype-2ea043)
-![Class](https://img.shields.io/badge/class-scientific%20compute%20gateway-8250df)
+![Class](https://img.shields.io/badge/class-science--default%20amorphous%20router-8250df)
 ![License](https://img.shields.io/badge/license-evaluation%20only-d29922)
 
 </div>
 
 ## Try the compute-layer demo
 
-**GitHub Pages surface:** [`playgrid.html`](playgrid.html)
+**Public surface:** [`playgrid.html`](playgrid.html)
 
-It wraps the existing DIVINE_REALM slot prototype with explicit scientific-compute consent, CPU caps, immediate revoke, visible simulated work receipts, and a Golem-compatible scientific Requestor bridge model.
+DIVINE_REALM keeps **SCIENCE as its default narrative/impact lane**, but the underlying PLAYGRID layer is now route-switchable. The same consented compute model can be redirected to an approved scientific Requestor, Golem/another marketplace, a data center/cloud, an operator workload, or a future buyer-defined provider.
+
+## Stable idea, replaceable destination
+
+```text
+PLAYER CONSENT + DEVICE POLICY
+            ↓
+       PLAYGRID ROUTER
+            ↓
+   ┌────────┼─────────┬──────────┬─────────┐
+   ↓        ↓         ↓          ↓         ↓
+SCIENCE   GOLEM    DATACENTER  OPERATOR  CUSTOM
+   │        │         │          │         │
+   └────────┴─────────┴──────────┴─────────┘
+            ↓
+      VERIFIED RECEIPT
+            ↓
+   IMPACT / PLAYER EARNINGS /
+       COMPUTE TREASURY
+```
+
+The scientific identity of DIVINE_REALM is a **default presentation and partnership lane**, not a technical lock-in. A licensed buyer changes `ProviderManifest + server adapter + receipt verifier + sink policy` rather than rewriting the slot.
 
 ## Status
 
-**Active public prototype / partnership demo.** DIVINE_REALM is a Telegram WebApp-compatible slot-style interaction shell exploring how a conventional game can be paired with an **independent scientific/public-good compute gateway**.
-
-The current public build uses local browser simulation for game state. It **does not yet claim to execute real scientific workloads**, does not provide real-money gambling, and is not a certified production deployment.
+The current public build uses local browser simulation. It **does not yet claim real scientific computation, real Golem work/payment, real-money gambling, or production readiness**.
 
 ```text
 MATURITY = WORK_IN_PROGRESS
-PROJECT_CLASS = INTERACTIVE_GAMING_SCIENTIFIC_COMPUTE_PROTOTYPE
 TELEGRAM_WEBAPP = TRUE
-REAL_MONEY_GAMBLING = FALSE
-CURRENT_VALUE_STORAGE = LOCAL_SIMULATION_ONLY
-SCIENTIFIC_COMPUTE_GATEWAY = PUBLIC_DEMO / PARTNERSHIP_PILOT_STAGE
-GOLEM_SCIENCE_BRIDGE_MODEL = ADDED
+PLAYGRID_ROUTING_FABRIC = PUBLIC_DEMO
+DEFAULT_ROUTE = SCIENCE
+ALTERNATE_ROUTES = GOLEM / DATACENTER / OPERATOR / CUSTOM
 SCIENTIFIC_RESULT = NOT_CLAIMED
+REAL_MONEY_GAMBLING = FALSE
 PRODUCTION_READINESS = NOT_ESTABLISHED
 ```
 
-## Concept
-
-```text
-GAME / TELEGRAM WEBAPP
-          |
-          +----------------------> REGULATED RNG / PAYOUT
-          |
-          +----------------------> SCIENTIFIC COMPUTE GATEWAY
-                                     |
-                                     +--> approved research Requestor
-                                     +--> Golem / other approved provider
-                                     +--> upstream result + receipt
-                                     +--> Impact Ledger
-```
-
-The compute lane is deliberately separated from gambling mathematics. Compute completion, compute speed, scientific output, or client-device power must never change RNG outcome, payout, odds, RTP, or bonus eligibility.
-
-A production pilot can route authenticated requests through a server-side/approved-companion gateway. A Telegram/browser demo must not pretend to be a native BOINC, Folding@home, Yagna, or Golem worker when it is not one.
-
-## Golem science bridge
+## Science default
 
 ```text
 CONSENT
@@ -61,7 +60,7 @@ PLAYGRID GATEWAY
   ↓
 APPROVED SCIENTIFIC REQUESTOR
   ↓
-YAGNA / GOLEM
+Golem / BOINC / data-center / other approved provider
   ↓
 SCIENTIFIC WORKLOAD
   ↓
@@ -70,36 +69,33 @@ VERIFIED UPSTREAM RECEIPT
 IMPACT LEDGER
 ```
 
-See [`.janus/PLAYGRID_GOLEM_SCIENCE_MODEL.json`](.janus/PLAYGRID_GOLEM_SCIENCE_MODEL.json).
+**Truth boundary:** a compute provider is not automatically a scientific authority. A real scientific workload must be supplied/accepted by a compatible research owner before any scientific or medical impact claim is made.
 
-**Truth boundary:** Golem is distributed compute infrastructure, not itself a vaccine-discovery project. A real scientific workload must be supplied and accepted by a compatible research Requestor/project before any scientific impact claim is made.
+## Other routes
 
-## Why it may matter
+The same surface may be licensed for:
 
-The proposal is not “gambling proves science” and not “play more to help science.” It is a reusable infrastructure layer that can let an operator, aggregator, sponsor, data center, distributed-compute market, and approved workload owner account for **real, capped, verifiable computation alongside already-authorized gameplay**.
+- useful paid compute through a marketplace such as Golem;
+- buyer-selected cloud/data-center batch workloads;
+- approved operator-owned workloads;
+- public-good computation;
+- future provider classes admitted by signed configuration.
 
-Potential value includes:
+## Welfare / fairness boundary
 
-- verifiable scientific/public-interest campaigns;
-- a reusable platform-level integration rather than one isolated slot;
-- a route connecting gaming platforms to distributed/cloud/data-center capacity;
-- independently auditable workload receipts;
-- product differentiation without altering certified RNG logic.
+Compute scheduling is governed by **consent + device policy + provider capacity**, not spin count or outcome. No compute route may modify RNG, RTP, odds, wager size, bonus eligibility, personal jackpot weighting or risk/self-exclusion controls. Scientific contribution must never become “play longer to help more”.
 
-See [`PARTNERSHIP_BRIEF.md`](PARTNERSHIP_BRIEF.md) for the architecture, scale examples, proof-of-compute receipt, scientific boundary, and pilot gates.
+## Security boundary
 
-## Responsible-gaming boundary
+Telegram/Web is the control and visualization plane. Provider credentials, Yagna/app keys, wallet private material, settlement secrets and production verification remain server-side.
 
-Scientific contribution must not be used as pressure to gamble longer or lose more. Compute is governed by consent/device policy rather than spin count; responsible-gaming limits override any compute campaign.
+## Documents
 
-## Scientific boundary
+- [`PARTNERSHIP_BRIEF.md`](PARTNERSHIP_BRIEF.md)
+- [`LICENSE.md`](LICENSE.md)
+- [`IP_NOTICE.md`](IP_NOTICE.md)
+- [`PROJECT_STATUS.json`](PROJECT_STATUS.json)
 
-A workload is considered scientifically useful only when its owner/research partner accepts it under a real protocol. DIVINE_REALM does not itself certify medical or scientific value.
+The executable protocol and provider-routing fabric are maintained on the `welfare-first-v0.1` engineering branch pending production gates.
 
-## Evaluation & IP
-
-- [`LICENSE.md`](LICENSE.md) — public-demo evaluation license; no production/commercial license is granted.
-- [`IP_NOTICE.md`](IP_NOTICE.md) — copyright / public-private boundary and production-sensitive material guidance.
-- [`PROJECT_STATUS.json`](PROJECT_STATUS.json) — machine-readable maturity and deployment boundary.
-
-Publication on GitHub is not a claim that the underlying method is patented or patent-pending. Commercial or scientific deployment requires separate written agreements and independent legal, regulatory, security, platform-policy, scientific-partner, ethics, and responsible-gaming review.
+Commercial/scientific deployment requires separate agreements and independent legal, regulatory, security, privacy, provider, research/ethics, energy/thermal and responsible-gaming review.
