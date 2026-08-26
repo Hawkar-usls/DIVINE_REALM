@@ -1,0 +1,39 @@
+{
+  "schema": "janus.compute-protocol.consumer-binding.v1",
+  "protocol_id": "janus.welfare.compute-protocol",
+  "protocol_version": "0.1.0",
+  "consumer": "Hawkar-usls/DIVINE_REALM",
+  "temporary_canonical_source": {
+    "repository": "Hawkar-usls/SSlot",
+    "branch": "welfare-first-v0.1",
+    "path": "shared/compute-protocol/protocol.js",
+    "extraction_target": "DEDICATED_NEUTRAL_REPOSITORY"
+  },
+  "allowed_task_types": ["SCIENCE_WORK_UNIT"],
+  "allowed_sink": "IMPACT_LEDGER",
+  "compute_only_mode_required": true,
+  "game_surface_access": "READ_ONLY_STATUS",
+  "forbidden_authority": [
+    "RNG",
+    "RTP",
+    "WIN_PROBABILITY",
+    "PAYOUT_MULTIPLIER",
+    "FREE_SPIN_ENTITLEMENT",
+    "BET_SIZE",
+    "PERSONAL_JACKPOT_WEIGHT",
+    "LOSS_REBATE"
+  ],
+  "consent_requirements": {
+    "explicit_opt_in": true,
+    "revocable_immediately": true,
+    "default_mode": "off",
+    "default_gpu": false,
+    "allow_on_battery_default": false,
+    "cpu_policy_target_percent_max": 30
+  },
+  "proof_policy": {
+    "unverified_receipt_has_value": false,
+    "production_proof_kind": "SCIENCE_UPSTREAM_RECEIPT",
+    "mock_proofs_allowed_in_production": false
+  }
+}
