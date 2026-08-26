@@ -22,16 +22,16 @@
     <select id="route">
       <option value="science">Science / public-good Requestor</option>
       <option value="golem">Golem marketplace · оплачиваемый полезный compute</option>
-      <option value="datacenter">Data center / cloud workload</option>
-      <option value="operator">Operator-owned approved workload</option>
-      <option value="custom">Custom buyer route · будущий provider</option>
+      <option value="datacenter">Data center / cloud · general compute</option>
+      <option value="operator">Operator-owned approved · general compute</option>
+      <option value="custom">Custom buyer route · future general compute</option>
     </select>
 
     <div class="box">
       <div class="row"><span><span id="dot" class="pulse"></span><b id="status">OFF</b></span><span id="route-class" class="small">SCIENCE</span></div>
       <div class="sep"></div>
       <div id="path">Mini App → PLAYGRID Gateway → approved research Requestor → verified science receipt → Impact Ledger</div>
-      <div class="small" style="margin-top:7px">Production routing basis: consent + device policy + provider capacity. Не частота и не исход спинов.</div>
+      <div class="small" style="margin-top:7px">Routing basis: consent + device policy + provider capacity. Не частота и не исход спинов.</div>
     </div>
 
     <label for="cpu">Лимит CPU: <span id="cpu-val">15%</span></label>
@@ -44,7 +44,7 @@
     <div class="box">
       <div class="row"><span>Verified/demo compute credits</span><span id="credits" class="metric">0.00</span></div>
       <div class="row"><span>Личная compute-ценность</span><span id="player" class="metric ok">0.0000</span></div>
-      <div class="row"><span>Impact / Treasury</span><span id="shared" class="metric">0.0000</span></div>
+      <div class="row"><span>Impact / Treasury / Sink</span><span id="shared" class="metric">0.0000</span></div>
       <div id="value-note" class="small" style="margin-top:7px">Science route: вклад идёт в Impact Ledger; научную полезность подтверждает реальный workload owner.</div>
     </div>
 
@@ -52,8 +52,8 @@
     <div id="ledger" class="ledger">NO_RECEIPT</div>
 
     <div class="box">
-      <b>Один интерфейс — много направлений</b>
-      <div class="small" style="margin-top:5px">Science, marketplace, data center, operator workload и будущие provider-классы — это manifests/адаптеры одного routing fabric. Научная тема DIVINE REALM остаётся presentation/default lane, а не технической клеткой.</div>
+      <b>Science — дефолт, не клетка</b>
+      <div class="small" style="margin-top:5px">Для неизвестных сегодня задач есть GENERAL_COMPUTE_JOB. Новый provider подключается как manifest + server adapter + verifier + audited sink, не как переписанный слот.</div>
     </div>
     <div class="small warn">DEMO / TEST ONLY · receipts и значения симулированы · Golem сам по себе не является «поиском вакцины» · provider secrets запрещены в браузере.</div>
   </section>
@@ -63,9 +63,9 @@
   const ROUTES={
     science:{provider:'science-requestor',routeClass:'SCIENCE',task:'SCIENCE_WORK_UNIT',proof:'MOCK_SCIENCE_RECEIPT',path:'Mini App → PLAYGRID Gateway → approved research Requestor → verified science receipt → Impact Ledger',asset:'impact',playerRatio:0,sharedRatio:1,note:'Science route: вклад идёт в Impact Ledger; реальную научную полезность подтверждает workload owner.'},
     golem:{provider:'golem-marketplace',routeClass:'MARKETPLACE',task:'ECONOMIC_COMPUTE_JOB',proof:'MOCK_ECONOMIC_COMPUTE_RECEIPT',path:'Mini App → PLAYGRID Gateway → Golem → Requestor → verified payment → value split',asset:'tGLM',playerRatio:.70,sharedRatio:.30,note:'Golem route: оплачиваемый Requestor workload. 70/30 — только demo accounting split.'},
-    datacenter:{provider:'datacenter-generic',routeClass:'DATACENTER',task:'ECONOMIC_COMPUTE_JOB',proof:'MOCK_ECONOMIC_COMPUTE_RECEIPT',path:'Mini App → PLAYGRID Gateway → buyer-selected data center/cloud → verified workload receipt',asset:'compute-credit',playerRatio:.50,sharedRatio:.50,note:'Data-center route: workload, verification и economics задаются контрактом покупателя.'},
-    operator:{provider:'operator-approved',routeClass:'OPERATOR',task:'ECONOMIC_COMPUTE_JOB',proof:'MOCK_ECONOMIC_COMPUTE_RECEIPT',path:'Mini App → PLAYGRID Gateway → approved operator workload → audited receipt',asset:'contract-credit',playerRatio:.50,sharedRatio:.50,note:'Operator route: только допущенные workload classes; никакого доступа к RNG.'},
-    custom:{provider:'buyer-custom',routeClass:'CUSTOM',task:'ECONOMIC_COMPUTE_JOB',proof:'MOCK_ECONOMIC_COMPUTE_RECEIPT',path:'Mini App → PLAYGRID Gateway → signed buyer provider manifest → custom verifier/sink',asset:'custom-credit',playerRatio:.50,sharedRatio:.50,note:'Custom route показывает, что будущий provider подключается через manifest + server adapter + verifier.'}
+    datacenter:{provider:'datacenter-generic',routeClass:'DATACENTER',task:'GENERAL_COMPUTE_JOB',proof:'MOCK_GENERAL_COMPUTE_RECEIPT',path:'Mini App → PLAYGRID Gateway → buyer-selected data center/cloud → arbitrary approved workload → verified general receipt',asset:'compute-credit',playerRatio:0,sharedRatio:1,note:'Data-center route — нейтральный general compute; workload, economics и sink задаются контрактом.'},
+    operator:{provider:'operator-approved',routeClass:'OPERATOR',task:'GENERAL_COMPUTE_JOB',proof:'MOCK_GENERAL_COMPUTE_RECEIPT',path:'Mini App → PLAYGRID Gateway → approved operator workload → audited general receipt',asset:'general-credit',playerRatio:0,sharedRatio:1,note:'Operator route: только допущенные workload classes; никакого доступа к RNG.'},
+    custom:{provider:'buyer-custom',routeClass:'CUSTOM',task:'GENERAL_COMPUTE_JOB',proof:'MOCK_GENERAL_COMPUTE_RECEIPT',path:'Mini App → PLAYGRID Gateway → signed buyer provider manifest → arbitrary approved workload → custom verifier/sink',asset:'custom-credit',playerRatio:0,sharedRatio:1,note:'Custom route — для будущих задач, которых мы сегодня не знаем. Production только после admission/security/legal gates.'}
   };
   const route=$('route'),cpu=$('cpu'),consent=$('consent'),start=$('start'),stop=$('stop'),status=$('status'),dot=$('dot'),credits=$('credits'),player=$('player'),shared=$('shared'),ledger=$('ledger');
   let timer=null,n=0,c=0,p=0,s=0;
@@ -73,7 +73,7 @@
   $('pg-toggle').onclick=()=>{$('pg-panel').hidden=!$('pg-panel').hidden};cpu.oninput=()=>{$('cpu-val').textContent=cpu.value+'%'};
   function renderRoute(){const r=ROUTES[route.value];$('route-class').textContent=r.routeClass;$('path').textContent=r.path;$('value-note').textContent=r.note;}
   route.onchange=renderRoute;renderRoute();
-  function receipt(){const r=ROUTES[route.value];n++;c+=.25;const gross=.001,pp=gross*r.playerRatio,sp=gross*r.sharedRatio;p+=pp;s+=sp;const out={protocol:'janus.welfare.compute-protocol@0.2.0',routing_fabric:'0.1.0',mode:'SIMULATION',provider_id:r.provider,route_class:r.routeClass,task_type:r.task,receipt_id:'demo_'+route.value+'_'+String(n).padStart(4,'0'),proof_kind:r.proof,compute_credit:.25,settlement_asset:r.asset,allocation:{player_compute_value:pp,shared_treasury_or_impact:sp},scheduling_basis:'CONSENT_DEVICE_POLICY_AND_PROVIDER_CAPACITY',game_event_weighting:'FORBIDDEN',game_effect:'NONE',at:new Date().toISOString()};credits.textContent=c.toFixed(2);player.textContent=p.toFixed(4)+' '+r.asset;shared.textContent=s.toFixed(4)+' '+r.asset;ledger.textContent=JSON.stringify(out,null,2);}
+  function receipt(){const r=ROUTES[route.value];n++;c+=.25;const gross=.001,pp=gross*r.playerRatio,sp=gross*r.sharedRatio;p+=pp;s+=sp;const out={protocol:'janus.welfare.compute-protocol@0.3.0',routing_fabric:'0.1.0',mode:'SIMULATION',provider_id:r.provider,route_class:r.routeClass,task_type:r.task,receipt_id:'demo_'+route.value+'_'+String(n).padStart(4,'0'),proof_kind:r.proof,compute_credit:.25,settlement_asset:r.asset,allocation:{player_compute_value:pp,shared_or_contract_sink_value:sp},scheduling_basis:'CONSENT_DEVICE_POLICY_AND_PROVIDER_CAPACITY',game_event_weighting:'FORBIDDEN',game_effect:'NONE',at:new Date().toISOString()};credits.textContent=c.toFixed(2);player.textContent=p.toFixed(4)+' '+r.asset;shared.textContent=s.toFixed(4)+' '+r.asset;ledger.textContent=JSON.stringify(out,null,2);}
   start.onclick=()=>{if(!consent.checked){alert('Нужно явное согласие на вычислительный слой.');return;}if(timer)return;status.textContent='ACTIVE · SIMULATION';status.className='ok';dot.classList.add('on');start.disabled=true;stop.disabled=false;consent.disabled=true;cpu.disabled=true;route.disabled=true;receipt();timer=setInterval(receipt,12000);};
   stop.onclick=()=>{if(timer)clearInterval(timer);timer=null;status.textContent='OFF · CONSENT REVOKED';status.className='';dot.classList.remove('on');start.disabled=false;stop.disabled=true;consent.disabled=false;consent.checked=false;cpu.disabled=false;route.disabled=false;};
 })();
