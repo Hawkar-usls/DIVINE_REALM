@@ -1,0 +1,17 @@
+{
+  "schema": "janus.helios.child-binding.v1",
+  "parent": "Hawkar-usls/Janus-HELIOS",
+  "child": "Hawkar-usls/DIVINE_REALM",
+  "child_role": "SPECIALIZED_SCIENCE_PUBLIC_GOOD_REFERENCE_SURFACE",
+  "default_route_class": "SCIENCE",
+  "default_task_types": ["SCIENCE_WORK_UNIT"],
+  "default_value_sink": "IMPACT_LEDGER",
+  "may_use_parent_router_contract": true,
+  "must_remain_specialized": true,
+  "may_override_parent_branding": true,
+  "may_override_parent_default_route": true,
+  "may_override_parent_game_theme": true,
+  "may_override_parent_rng_or_rtp_from_compute": false,
+  "compute_scheduling_independent_from_spin_frequency": true,
+  "note": "DIVINE_REALM remains the fixed science/public-good demonstration. Janus-HELIOS is the configurable universal parent asset."
+}
