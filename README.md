@@ -1,93 +1,98 @@
 <div align="center">
 
 # DIVINE_REALM
-### Interactive Gaming × PLAYGRID Amorphous Compute Router
+### Scientific / Public-Good Compute Child of JANUS HELIOS
 
 ![Status](https://img.shields.io/badge/status-active%20prototype-2ea043)
-![Class](https://img.shields.io/badge/class-science--default%20amorphous%20router-8250df)
+![Class](https://img.shields.io/badge/class-specialized%20science%20child-8250df)
 ![License](https://img.shields.io/badge/license-evaluation%20only-d29922)
 
 </div>
 
-## Try the compute-layer demo
+## Product role
 
-**Public surface:** [`playgrid.html`](playgrid.html)
-
-DIVINE_REALM keeps **SCIENCE as its default narrative/impact lane**, but the underlying PLAYGRID layer is now route-switchable. The same consented compute model can be redirected to an approved scientific Requestor, Golem/another marketplace, a data center/cloud, an operator workload, or a future buyer-defined provider.
-
-## Stable idea, replaceable destination
+DIVINE_REALM is deliberately specialized:
 
 ```text
 PLAYER CONSENT + DEVICE POLICY
             ↓
-       PLAYGRID ROUTER
+      DIVINE_REALM
             ↓
-   ┌────────┼─────────┬──────────┬─────────┐
-   ↓        ↓         ↓          ↓         ↓
-SCIENCE   GOLEM    DATACENTER  OPERATOR  CUSTOM
-   │        │         │          │         │
-   └────────┴─────────┴──────────┴─────────┘
+approved scientific Requestor
             ↓
-      VERIFIED RECEIPT
+scientific/public-good workload
             ↓
-   IMPACT / PLAYER EARNINGS /
-       COMPUTE TREASURY
+verified upstream acceptance
+            ↓
+       IMPACT_LEDGER
 ```
 
-The scientific identity of DIVINE_REALM is a **default presentation and partnership lane**, not a technical lock-in. A licensed buyer changes `ProviderManifest + server adapter + receipt verifier + sink policy` rather than rewriting the slot.
+The universal route-switchable product lives in [`JANUS HELIOS`](https://github.com/Hawkar-usls/Janus-HELIOS).
+
+## Public compute demo
+
+**Surface:** [`playgrid.html`](playgrid.html)
+
+The overlay now exposes one specialized route only: `SCIENCE`. It does not let the player redirect DIVINE_REALM to marketplace, data-center, operator or custom workloads; that buyer-facing flexibility belongs to HELIOS.
+
+## Ecosystem
+
+```text
+JANUS HELIOS
+   universal configurable parent
+          │
+          ├── DIVINE_REALM
+          │     fixed Science/Public-Good child
+          │
+          └── SSlot
+                fixed Shared Mining-Pool/Jackpot child
+```
+
+Canonical ecosystem contract: [`Janus-HELIOS/.janus/HELIOS_ECOSYSTEM.json`](https://github.com/Hawkar-usls/Janus-HELIOS/blob/main/.janus/HELIOS_ECOSYSTEM.json).
+
+Local binding: [`.janus/HELIOS_PARENT_BINDING.json`](.janus/HELIOS_PARENT_BINDING.json).
+
+## Scientific truth boundary
+
+A compute provider is not automatically a scientific authority. DIVINE_REALM may claim scientific contribution only after a real research owner/Requestor accepts the workload/result under an actual protocol.
+
+```text
+compute hours != medical outcome
+provider payment != scientific validation
+gameplay != scientific evidence
+```
+
+Scientific contribution must never become pressure to gamble longer.
+
+## Hard boundary
+
+Compute scheduling is governed by consent + device policy + available accepted work, not by spin frequency or outcome. Scientific compute cannot modify:
+
+```text
+RNG
+RTP
+win probability
+bet size
+bonus eligibility
+personal jackpot weight
+```
 
 ## Status
 
-The current public build uses local browser simulation. It **does not yet claim real scientific computation, real Golem work/payment, real-money gambling, or production readiness**.
+The current public build uses simulation. It does not claim real scientific computation, medical results, real-money gambling or production readiness.
 
 ```text
 MATURITY = WORK_IN_PROGRESS
 TELEGRAM_WEBAPP = TRUE
-PLAYGRID_ROUTING_FABRIC = PUBLIC_DEMO
+HELIOS_ROLE = FIXED_SCIENCE_CHILD
+PUBLIC_ROUTE_SWITCHING = FALSE
 DEFAULT_ROUTE = SCIENCE
-ALTERNATE_ROUTES = GOLEM / DATACENTER / OPERATOR / CUSTOM
+TASK_TYPE = SCIENCE_WORK_UNIT
+REAL_SCIENTIFIC_REQUESTOR = NOT_CONNECTED
 SCIENTIFIC_RESULT = NOT_CLAIMED
 REAL_MONEY_GAMBLING = FALSE
 PRODUCTION_READINESS = NOT_ESTABLISHED
 ```
-
-## Science default
-
-```text
-CONSENT
-  ↓
-PLAYGRID GATEWAY
-  ↓
-APPROVED SCIENTIFIC REQUESTOR
-  ↓
-Golem / BOINC / data-center / other approved provider
-  ↓
-SCIENTIFIC WORKLOAD
-  ↓
-VERIFIED UPSTREAM RECEIPT
-  ↓
-IMPACT LEDGER
-```
-
-**Truth boundary:** a compute provider is not automatically a scientific authority. A real scientific workload must be supplied/accepted by a compatible research owner before any scientific or medical impact claim is made.
-
-## Other routes
-
-The same surface may be licensed for:
-
-- useful paid compute through a marketplace such as Golem;
-- buyer-selected cloud/data-center batch workloads;
-- approved operator-owned workloads;
-- public-good computation;
-- future provider classes admitted by signed configuration.
-
-## Welfare / fairness boundary
-
-Compute scheduling is governed by **consent + device policy + provider capacity**, not spin count or outcome. No compute route may modify RNG, RTP, odds, wager size, bonus eligibility, personal jackpot weighting or risk/self-exclusion controls. Scientific contribution must never become “play longer to help more”.
-
-## Security boundary
-
-Telegram/Web is the control and visualization plane. Provider credentials, Yagna/app keys, wallet private material, settlement secrets and production verification remain server-side.
 
 ## Documents
 
@@ -96,6 +101,4 @@ Telegram/Web is the control and visualization plane. Provider credentials, Yagna
 - [`IP_NOTICE.md`](IP_NOTICE.md)
 - [`PROJECT_STATUS.json`](PROJECT_STATUS.json)
 
-The executable protocol and provider-routing fabric are maintained on the `welfare-first-v0.1` engineering branch pending production gates.
-
-Commercial/scientific deployment requires separate agreements and independent legal, regulatory, security, privacy, provider, research/ethics, energy/thermal and responsible-gaming review.
+The executable protocol remains on the `welfare-first-v0.1` engineering branch pending real Requestor, verification, telemetry, security, ethics and legal gates.
