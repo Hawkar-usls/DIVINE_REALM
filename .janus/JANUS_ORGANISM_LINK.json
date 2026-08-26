@@ -7,15 +7,27 @@
     "class": "SUBTISSUE",
     "subtissue_key": "divine_realm_narrative_world",
     "parent_organ": "simulation_habitat",
-    "role": "NARRATIVE_AND_SYMBOLIC_WORLD",
+    "role": "NARRATIVE_AND_SOCIAL_IMPACT_SURFACE",
     "authority": "CREATIVE_SCOPE_ONLY",
     "evidence_authority": false
+  },
+  "paired_repository": {
+    "repository": "Hawkar-usls/SSlot",
+    "relationship": "REFERENCE_GAME_AND_WELFARE_SURFACE",
+    "shared_contracts": [
+      "GAMBLING_SAFETY_CONTRACT.json",
+      "SOCIAL_IMPACT_LEDGER_SCHEMA.json"
+    ]
   },
   "authority_delta": 0,
   "write_back_default": "DENY",
   "boundaries": [
     "MYTHOLOGICAL_LANGUAGE != EMPIRICAL_AUTHORITY",
     "NARRATIVE_STATE != WORLD_EVIDENCE",
+    "NARRATIVE_STATE != RNG_OR_RTP_AUTHORITY",
+    "SPIRITUAL_FRAMING != REASON_TO_GAMBLE",
+    "PLAYER_LOSS != CHARITABLE_OR_SPIRITUAL_MERIT",
+    "RISK_SIGNAL -> RESTRICT_ONLY",
     "SUBTISSUE_PARENT != AUTHORITY_INHERITANCE"
   ]
 }
