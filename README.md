@@ -6,6 +6,7 @@
 ![Status](https://img.shields.io/badge/status-active%20R%26D-d4a72c)
 ![Class](https://img.shields.io/badge/class-narrative%20impact%20surface-6e7681)
 ![Real Money](https://img.shields.io/badge/real--money-blocked%20pending%20review-b62324)
+![License](https://img.shields.io/badge/license-source--available%20evaluation-6f42c1)
 
 </div>
 
@@ -54,6 +55,29 @@ The Realm can show a transparent, privacy-preserving public ledger of operator-f
 
 Impact totals must never be used as a “keep playing” counter.
 
+## Scientific compute gate
+
+The current R&D branch defines DIVINE_REALM as the science/public-good consumer of the shared compute protocol:
+
+```text
+explicit opt-in
+    ↓
+ComputeConsentGate
+    ↓
+SCIENCE_WORK_UNIT
+    ↓
+approved upstream provider
+    ↓
+verified receipt
+    ↓
+Impact Ledger
+```
+
+The game surface has read-only status access. Scientific contribution cannot alter RNG, RTP, win probability, payout multiplier, bet size, free-spin entitlement, personal jackpot weighting, or welfare controls.
+
+- [`docs/DUAL_COMPUTE_POSITIVE_GATE_ROADMAP.md`](docs/DUAL_COMPUTE_POSITIVE_GATE_ROADMAP.md)
+- [`shared/compute-protocol/CONSUMER_BINDING.json`](shared/compute-protocol/CONSUMER_BINDING.json)
+
 ## Boundary
 
 Religious, mythological, or metaphysical language is creative framing only. It establishes no scientific, theological, medical, prophetic, or supernatural authority. Real-money deployment remains blocked until independent legal, security, AML, fairness/RNG, privacy, accessibility, responsible-gambling, and narrative-coercion review gates pass.
@@ -65,6 +89,15 @@ Religious, mythological, or metaphysical language is creative framing only. It e
 - [`SOCIAL_IMPACT_LEDGER_SCHEMA.json`](SOCIAL_IMPACT_LEDGER_SCHEMA.json)
 - [`PROJECT_STATUS.json`](PROJECT_STATUS.json)
 
+## Licensing
+
+This repository is **source-available for evaluation, not open source**. Public access does not grant production or commercial rights.
+
+- [`LICENSE`](LICENSE)
+- [`docs/COMMERCIAL_LICENSING.md`](docs/COMMERCIAL_LICENSING.md)
+
+Commercial, pilot, OEM, operator, platform, hosted, white-label, or production use requires a separate written agreement with the copyright holder.
+
 ## Current status
 
 ```text
@@ -73,6 +106,8 @@ REAL_MONEY = BLOCKED_PENDING_INDEPENDENT_REVIEW
 NARRATIVE_COERCION_GATE = ADDED
 WELFARE_FIRST_CONTRACT = ADDED
 PUBLIC_IMPACT_LEDGER_SCHEMA = ADDED
+SCIENCE_COMPUTE_PROTOCOL_BINDING = ADDED
+COMMERCIAL_EVALUATION_LICENSE = ADDED
 LEGACY_GAMEPLAY_MIGRATION = OPEN
 PRODUCTION_READINESS = NOT_ESTABLISHED
 ```
