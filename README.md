@@ -9,6 +9,12 @@
 
 </div>
 
+## Try the compute-layer demo
+
+**GitHub Pages surface:** [`playgrid.html`](playgrid.html)
+
+It wraps the existing DIVINE_REALM slot prototype with explicit scientific-compute consent, CPU caps, immediate revoke, visible simulated work receipts, and a Golem-compatible scientific Requestor bridge model.
+
 ## Status
 
 **Active public prototype / partnership demo.** DIVINE_REALM is a Telegram WebApp-compatible slot-style interaction shell exploring how a conventional game can be paired with an **independent scientific/public-good compute gateway**.
@@ -21,7 +27,8 @@ PROJECT_CLASS = INTERACTIVE_GAMING_SCIENTIFIC_COMPUTE_PROTOTYPE
 TELEGRAM_WEBAPP = TRUE
 REAL_MONEY_GAMBLING = FALSE
 CURRENT_VALUE_STORAGE = LOCAL_SIMULATION_ONLY
-SCIENTIFIC_COMPUTE_GATEWAY = DESIGN / PARTNERSHIP_PILOT_STAGE
+SCIENTIFIC_COMPUTE_GATEWAY = PUBLIC_DEMO / PARTNERSHIP_PILOT_STAGE
+GOLEM_SCIENCE_BRIDGE_MODEL = ADDED
 SCIENTIFIC_RESULT = NOT_CLAIMED
 PRODUCTION_READINESS = NOT_ESTABLISHED
 ```
@@ -35,24 +42,47 @@ GAME / TELEGRAM WEBAPP
           |
           +----------------------> SCIENTIFIC COMPUTE GATEWAY
                                      |
-                                     +--> approved research workload
-                                     +--> data center / cloud provider
-                                     +--> signed receipt / impact ledger
+                                     +--> approved research Requestor
+                                     +--> Golem / other approved provider
+                                     +--> upstream result + receipt
+                                     +--> Impact Ledger
 ```
 
 The compute lane is deliberately separated from gambling mathematics. Compute completion, compute speed, scientific output, or client-device power must never change RNG outcome, payout, odds, RTP, or bonus eligibility.
 
-A production pilot can demonstrate the gateway by routing authenticated API requests or sponsored compute credits to an approved provider. A Telegram/browser demo should not pretend to be a native BOINC or Folding@home worker when it is not one.
+A production pilot can route authenticated requests through a server-side/approved-companion gateway. A Telegram/browser demo must not pretend to be a native BOINC, Folding@home, Yagna, or Golem worker when it is not one.
+
+## Golem science bridge
+
+```text
+CONSENT
+  ↓
+PLAYGRID GATEWAY
+  ↓
+APPROVED SCIENTIFIC REQUESTOR
+  ↓
+YAGNA / GOLEM
+  ↓
+SCIENTIFIC WORKLOAD
+  ↓
+VERIFIED UPSTREAM RECEIPT
+  ↓
+IMPACT LEDGER
+```
+
+See [`.janus/PLAYGRID_GOLEM_SCIENCE_MODEL.json`](.janus/PLAYGRID_GOLEM_SCIENCE_MODEL.json).
+
+**Truth boundary:** Golem is distributed compute infrastructure, not itself a vaccine-discovery project. A real scientific workload must be supplied and accepted by a compatible research Requestor/project before any scientific impact claim is made.
 
 ## Why it may matter
 
-The proposal is not “gambling proves science” and not “play more to help science.” It is a reusable infrastructure layer that can let an operator, aggregator, sponsor, data center, and approved workload owner account for **real, capped, verifiable computation alongside already-authorized gameplay**.
+The proposal is not “gambling proves science” and not “play more to help science.” It is a reusable infrastructure layer that can let an operator, aggregator, sponsor, data center, distributed-compute market, and approved workload owner account for **real, capped, verifiable computation alongside already-authorized gameplay**.
 
 Potential value includes:
 
 - verifiable scientific/public-interest campaigns;
 - a reusable platform-level integration rather than one isolated slot;
-- a new route connecting gaming platforms to cloud/data-center capacity;
+- a route connecting gaming platforms to distributed/cloud/data-center capacity;
 - independently auditable workload receipts;
 - product differentiation without altering certified RNG logic.
 
@@ -60,7 +90,7 @@ See [`PARTNERSHIP_BRIEF.md`](PARTNERSHIP_BRIEF.md) for the architecture, scale e
 
 ## Responsible-gaming boundary
 
-Scientific contribution must not be used as pressure to gamble longer or lose more. Compute should be capped and independent of stake size and player losses; responsible-gaming limits override any compute campaign.
+Scientific contribution must not be used as pressure to gamble longer or lose more. Compute is governed by consent/device policy rather than spin count; responsible-gaming limits override any compute campaign.
 
 ## Scientific boundary
 
