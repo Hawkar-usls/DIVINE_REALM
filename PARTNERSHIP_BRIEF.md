@@ -1,119 +1,90 @@
-# PLAYGRID / DIVINE_REALM — Science-Default Amorphous Compute Brief
+# DIVINE_REALM — Scientific / Public-Good Compute Partnership Brief
 
 > Public evaluation prototype. The current browser build does not yet claim real scientific workloads or production provider receipts.
 
 ## One-line proposal
 
-**Use DIVINE_REALM as a science-default presentation for a provider-agnostic compute-routing layer whose destination can be changed without changing game mathematics.**
+**Pair the DIVINE_REALM game surface with a fixed opt-in scientific/public-good compute lane whose work is accepted and verified by a real research Requestor/project.**
 
-## Architecture
+## Role in JANUS HELIOS
 
-```text
-PLAYER / TELEGRAM WEBAPP
-          |
-          +-----------------------> GAME / RNG / PAYOUT
-          |
-          +--> EXPLICIT CONSENT + DEVICE POLICY
-                         |
-                         v
-                  PLAYGRID ROUTER
-                         |
-       ┌─────────────────┼──────────────────┐
-       ↓                 ↓                  ↓
-   SCIENCE            MARKETPLACE       DATACENTER
-   default             e.g. Golem        / OPERATOR
-       │                 │                  │
-       └─────────────────┼──────────────────┘
-                         ↓
-                 VERIFIED RECEIPT
-                         ↓
-       IMPACT / PLAYER EARNINGS / TREASURY
-```
-
-The compute scheduler is driven by consent, device policy and provider capacity — **not by spin count, stake size, wins/losses or session intensity**. The game only exposes consent and read-only compute status.
-
-## Science is the default, not a lock-in
-
-DIVINE_REALM keeps its scientific/public-good identity, but the underlying PLAYGRID route can be replaced by a licensed buyer using:
+DIVINE_REALM is the fixed Science child of the wider [`JANUS HELIOS`](https://github.com/Hawkar-usls/Janus-HELIOS) ecosystem.
 
 ```text
-ProviderManifest
-+ server adapter
-+ authoritative receipt verifier
-+ sink/accounting policy
+JANUS HELIOS = universal route-switchable parent
+DIVINE_REALM = fixed Science/Public-Good child
+SSlot        = fixed Shared Mining-Pool/Jackpot child
 ```
 
-No RNG/RTP/wager/bonus code needs to change.
-
-## Reference routes
-
-### Science / public good
-
-A real compatible research Requestor/workload produces `SCIENCE_UPSTREAM_RECEIPT` evidence into an Impact Ledger.
-
-### Golem / compute marketplace
-
-Golem can be a general compute-market route. If the Requestor happens to be scientific, scientific authority still belongs to the real workload owner — not to Golem or the slot.
-
-### Data center / cloud
-
-A buyer can redirect the same routing fabric to approved CPU/GPU/batch workloads on its own infrastructure or a contracted provider.
-
-### Operator / custom
-
-Approved non-sensitive operator jobs or a future provider can be admitted through signed server configuration and a provider-specific verifier.
-
-## Player proposition
-
-Before compute starts the user sees:
-
-- compute is OFF by default;
-- selected route/provider class;
-- resource cap;
-- immediate stop/revoke;
-- visible receipt/contribution state;
-- explicit statement that compute does not improve gambling odds.
-
-The project forbids “play longer to help science more”. Compute-only participation must remain possible.
-
-## Partner proposition
-
-For an operator/aggregator:
-
-- one compute integration boundary across multiple workload classes;
-- provider replacement without changing certified game math;
-- verifiable impact/economic reporting;
-- a route to research, marketplaces and data-center partners.
-
-For a research/compute partner:
-
-- a new opt-in compute acquisition/distribution channel;
-- bounded workloads and explicit resource policy;
-- public-facing receipts tied to upstream evidence;
-- no transfer of scientific authority to game logic.
-
-## Risk context
-
-JANUS' `JANUS_ADDICTIVE_ENGAGEMENT_INDEX` models **Gambling disorder = 82.2/100, EXTREME, model interval 74–90, evidence confidence MODERATE_HIGH**. The source explicitly states this is a synthetic model output, not prevalence or an individual probability of addiction.
-
-Canonical artifact:
-`Hawkar-usls/janus-meta-registry/data/AI-LOVER-ADDICTIVE-ENGAGEMENT-INDEX-2026-08-24-v1.0.json`
-
-Therefore every route forbids:
+Universal buyer routing belongs to HELIOS. DIVINE_REALM stays focused on one scientific/public-good flow:
 
 ```text
-losses -> more compute reward
-stake size -> more compute rate
-more spins -> more compute scheduling
-charity pressure -> continued wagering
-compute -> better RNG/RTP/bonuses
+EXPLICIT CONSENT + DEVICE POLICY
+            ↓
+approved scientific Requestor
+            ↓
+approved science compute provider
+            ↓
+scientific/public-good workload
+            ↓
+authoritative upstream acceptance
+            ↓
+        IMPACT_LEDGER
 ```
 
-## Public handoff
+## Provider flexibility inside the fixed science role
 
-- Route-switchable demo: [`playgrid.html`](playgrid.html)
-- Buyer handoff contract: [`OPERATOR_HANDOFF_SPEC.json`](OPERATOR_HANDOFF_SPEC.json)
-- Licensing: [`LICENSE.md`](LICENSE.md)
-- IP boundary: [`IP_NOTICE.md`](IP_NOTICE.md)
+The compute substrate may vary while the product remains science-specialized. For example, an approved research partner could use:
 
-A clean pilot needs one real approved route, one authoritative receipt path and explicit consent. Science remains DIVINE_REALM's default story; PLAYGRID remains the reusable infrastructure underneath.
+- its own data-center/cloud path;
+- BOINC/Folding-style infrastructure where compatible;
+- Golem or another compute market when a real scientific Requestor supplies and validates the workload;
+- another admitted scientific-compute provider.
+
+The **route purpose remains Science/Public-Good**. If a buyer wants an economic marketplace, jackpot, operator batch, general data-center or custom route as the product destination, that belongs in HELIOS.
+
+## Scientific truth boundary
+
+A compute provider is not scientific authority. Scientific impact claims require a real workload owner/Requestor and authoritative acceptance of the result.
+
+```text
+compute hours != medical outcome
+provider payment != scientific validation
+gameplay != scientific evidence
+```
+
+The product must never say or imply “play longer to help science more”. Compute-only participation must remain possible.
+
+## Fairness firewall
+
+```text
+science compute -> RNG                     FORBIDDEN
+science compute -> RTP                     FORBIDDEN
+science compute -> win probability         FORBIDDEN
+science compute -> bet size                FORBIDDEN
+science compute -> bonus eligibility       FORBIDDEN
+spin frequency -> science scheduling       FORBIDDEN
+charity pressure -> continued wagering     FORBIDDEN
+unverified work -> Impact Ledger value      FORBIDDEN
+```
+
+## Pilot
+
+A clean first pilot is:
+
+```text
+DIVINE_REALM public demo
++ one real scientific Requestor
++ one approved compute provider path
++ authoritative science receipt store
+```
+
+Success means explicit consent, actual accepted workload, independently verifiable receipts, acceptable resource/energy behavior, immediate stop, and zero authority over game mathematics.
+
+Public demo: [`playgrid.html`](playgrid.html)
+
+Universal parent: [`JANUS HELIOS`](https://github.com/Hawkar-usls/Janus-HELIOS)
+
+Local ecosystem binding: [`.janus/HELIOS_PARENT_BINDING.json`](.janus/HELIOS_PARENT_BINDING.json)
+
+See also: [`LICENSE.md`](LICENSE.md), [`IP_NOTICE.md`](IP_NOTICE.md), [`PROJECT_STATUS.json`](PROJECT_STATUS.json).
