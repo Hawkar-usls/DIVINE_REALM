@@ -1,0 +1,40 @@
+{
+  "schema": "janus.playgrid.golem-science-model.v1",
+  "surface": "DIVINE_REALM",
+  "goal": "Expose an opt-in science/public-good compute lane that can use Golem when a real compatible scientific Requestor exists.",
+  "flow": [
+    "EXPLICIT_CONSENT",
+    "DEVICE_POLICY",
+    "PLAYGRID_GATEWAY",
+    "APPROVED_SCIENTIFIC_REQUESTOR",
+    "YAGNA_GOLEM",
+    "SCIENTIFIC_WORKLOAD",
+    "UPSTREAM_RESULT_AND_RECEIPT",
+    "IMPACT_LEDGER"
+  ],
+  "hard_truth": {
+    "golem_is_not_itself_a_vaccine_search_project": true,
+    "scientific_workload_must_come_from_real_requestor_or_project": true,
+    "public_demo_receipts_are_simulated": true,
+    "production_impact_requires_upstream_verification": true
+  },
+  "runtime_boundary": {
+    "browser": "CONTROL_AND_STATUS_ONLY",
+    "gateway": "SERVER_OR_APPROVED_COMPANION",
+    "yagna_app_key_in_browser": false
+  },
+  "player_benefit": {
+    "visible_contribution_receipt": true,
+    "impact_credits": true,
+    "compute_only_mode_required": true,
+    "gambling_advantage_from_compute": false
+  },
+  "welfare_firewall": {
+    "play_longer_to_help_more_messaging": false,
+    "loss_as_charity": false,
+    "stake_size_to_impact_multiplier": false,
+    "compute_to_rng": false,
+    "compute_to_rtp": false
+  },
+  "status": "PUBLIC_DEMO_MODEL_REAL_SCIENTIFIC_REQUESTOR_PENDING"
+}
