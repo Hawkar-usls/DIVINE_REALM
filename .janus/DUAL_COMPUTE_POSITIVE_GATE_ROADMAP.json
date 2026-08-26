@@ -1,0 +1,63 @@
+{
+  "schema": "janus.dual_compute_slot_roadmap.v1",
+  "repository": "Hawkar-usls/DIVINE_REALM",
+  "role": "POSITIVE_SCIENCE_COMPUTE_GATE",
+  "paired_repository": "Hawkar-usls/SSlot",
+  "status": "ROADMAP_ACTIVE_IMPLEMENTATION_PENDING",
+  "mission": "Use explicitly consented spare compute for verifiable public-benefit distributed science while keeping gambling outcomes mathematically independent from compute.",
+  "hard_invariants": {
+    "explicit_opt_in_required": true,
+    "instant_stop_required": true,
+    "hidden_compute_forbidden": true,
+    "compute_may_change_rng": false,
+    "compute_may_change_rtp": false,
+    "compute_may_change_bet_or_bonus_probability": false,
+    "wagering_required_for_compute": false,
+    "loss_as_scientific_contribution_message": false,
+    "thermal_and_energy_guard_required": true,
+    "project_provenance_required": true,
+    "validated_receipt_required_for_impact_claim": true
+  },
+  "pipeline": [
+    "COMPUTE_CONSENT_GATE",
+    "SCIENCE_PROJECT_ALLOWLIST",
+    "SCIENCE_COMPUTE_BROKER",
+    "LOW_PRIORITY_LOCAL_WORK",
+    "UPSTREAM_VALIDATION",
+    "CONTRIBUTION_RECEIPT",
+    "IMPACT_VISUALIZER",
+    "PUBLIC_IMPACT_LEDGER"
+  ],
+  "candidate_adapter_classes": [
+    "FOLDING_AT_HOME",
+    "BOINC_WORLD_COMMUNITY_GRID",
+    "VERIFIED_ACADEMIC_BOINC_PROJECTS"
+  ],
+  "narrative_rule": "THE_VISUALIZATION_IS_A_WINDOW_ON_COMPUTE_PROGRESS_NOT_A_FALSE_CLAIM_THAT_ANIMATION_ITSELF_IS_SCIENCE",
+  "modes": {
+    "PLAY_PLUS_COMPUTE": "allowed only after opt-in; outcome remains independent",
+    "COMPUTE_ONLY": "preferred standalone public-benefit path without wagering"
+  },
+  "phases": [
+    {"id": "P0", "name": "CONTRACT_FREEZE", "gate": "COMPUTE_CANNOT_CHANGE_GAMBLING_OUTCOME"},
+    {"id": "P1", "name": "LOCAL_FAKE_WORK_UNIT_SIMULATOR"},
+    {"id": "P2", "name": "FIRST_REAL_SCIENCE_ADAPTER", "gate": "REAL_SCIENCE_RECEIPT_VERIFIED"},
+    {"id": "P3", "name": "IMPACT_DASHBOARD_AND_COMPUTE_ONLY_MODE"},
+    {"id": "P4", "name": "NARRATIVE_VISUAL_INTEGRATION"},
+    {"id": "P5", "name": "SECURITY_PRIVACY_REVIEW"},
+    {"id": "P6", "name": "ENERGY_ENVIRONMENTAL_ACCOUNTING"},
+    {"id": "P7", "name": "NON_MONEY_PUBLIC_PILOT"},
+    {"id": "P8", "name": "REAL_MONEY_DEPLOYMENT_GATE", "status": "BLOCKED_UNTIL_EXTERNAL_REVIEWS_PASS"}
+  ],
+  "success_gates": {
+    "validated_science_compute_gt_zero": true,
+    "explicit_revocable_consent": true,
+    "hidden_compute": 0,
+    "rng_dependence_on_compute": 0,
+    "wagering_advantage_from_compute": 0,
+    "public_receipt_audit": "PASS_REQUIRED",
+    "thermal_energy_guards": "PASS_REQUIRED",
+    "compute_only_mode": "REQUIRED"
+  },
+  "human_roadmap": "docs/DUAL_COMPUTE_POSITIVE_GATE_ROADMAP.md"
+}

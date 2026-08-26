@@ -1,0 +1,25 @@
+{
+  "schema": "janus.compute-protocol.implementation-status.v1",
+  "protocol_id": "janus.welfare.compute-protocol",
+  "protocol_version": "0.1.0",
+  "consumer": "Hawkar-usls/DIVINE_REALM",
+  "status": "BOUND_TO_EXECUTABLE_PROTOCOL_FOUNDATION",
+  "allowed_lane": "SCIENCE_WORK_UNIT_TO_IMPACT_LEDGER",
+  "completed": [
+    "CONSUMER_BINDING",
+    "EXPLICIT_CONSENT_POLICY",
+    "READ_ONLY_GAME_SURFACE_POLICY",
+    "NO_RNG_RTP_REWARD_AUTHORITY",
+    "MOCK_PROOF_PRODUCTION_REJECTION_POLICY"
+  ],
+  "open_gates": [
+    "REAL_SCIENCE_UPSTREAM_ADAPTER",
+    "REAL_SCIENCE_RECEIPT_VERIFICATION",
+    "ENERGY_AND_THERMAL_TELEMETRY",
+    "COMPUTE_ONLY_UI",
+    "READ_ONLY_IN_GAME_STATUS_UI",
+    "CI_CONFORMANCE_TEST",
+    "DEDICATED_NEUTRAL_PROTOCOL_REPOSITORY"
+  ],
+  "deployment": "BLOCKED"
+}

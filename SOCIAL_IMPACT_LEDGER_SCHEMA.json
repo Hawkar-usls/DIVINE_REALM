@@ -1,0 +1,46 @@
+{
+  "schema_id": "janus.social-impact-ledger.v0.1",
+  "purpose": "Visualize and publish independently auditable public-benefit funding without framing gambling losses as charitable or spiritual merit.",
+  "accounting_basis": {
+    "source": "OPERATOR_PLATFORM_REVENUE",
+    "not_source": "PLAYER_MORAL_DONATION",
+    "rate_policy": "PREDECLARED_PER_ACCOUNTING_PERIOD",
+    "retroactive_rate_reduction": false,
+    "player_facing_copy_must_not_claim_loss_equals_donation": true,
+    "player_facing_copy_must_not_claim_wager_equals_spiritual_merit": true
+  },
+  "period_record": {
+    "period_id": "string",
+    "game_version": "string",
+    "jurisdiction": "string",
+    "currency": "string",
+    "gross_stakes": "decimal",
+    "player_returns": "decimal",
+    "gross_gaming_revenue": "decimal",
+    "platform_revenue_basis": "decimal",
+    "harm_prevention_allocation": "decimal",
+    "community_allocation": "decimal",
+    "research_allocation": "decimal",
+    "other_public_benefit_allocation": "decimal",
+    "beneficiary_records": "array",
+    "external_receipt_or_proof_refs": "array",
+    "ledger_previous_hash": "hex_or_null",
+    "ledger_record_hash": "hex",
+    "published_at": "iso8601"
+  },
+  "presentation_rules": [
+    "IMPACT_TOTAL_MUST_NOT_BE_USED_TO_PROMPT_DEPOSIT_OR_CONTINUED_PLAY",
+    "NO_PLAYER_SPEND_LEADERBOARD",
+    "NO_DONOR_STATUS_FROM_WAGER_OR_LOSS",
+    "COMMUNITY_VOTING_POWER_MUST_NOT_SCALE_WITH_SPEND",
+    "NO_SPIRITUAL_OR_MORAL_RANK_FROM_GAMBLING_ACTIVITY",
+    "PLAYER_IDENTIFIERS_MUST_NOT_APPEAR_IN_PUBLIC_LEDGER"
+  ],
+  "integrity_rules": [
+    "ALL_PUBLIC_BENEFIT_AMOUNTS_MUST_RECONCILE_TO_ACCOUNTING_BASIS",
+    "NO_RETROACTIVE_EDIT_WITHOUT_CORRECTION_RECORD",
+    "CORRECTIONS_APPEND_NEW_RECORD_AND_REFERENCE_SUPERSEDED_HASH",
+    "BENEFICIARY_IDENTITY_AND_PAYMENT_PROOF_SHOULD_BE_PUBLIC_WHERE_LAWFUL",
+    "BRAND_MARKETING_SPEND_CANNOT_BE_REPORTED_AS PUBLIC_BENEFIT"
+  ]
+}
