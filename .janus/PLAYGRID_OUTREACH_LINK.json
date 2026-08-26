@@ -1,0 +1,15 @@
+{
+  "schema": "janus.playgrid.outreach-link.v1",
+  "product": "PLAYGRID",
+  "consumer": "Hawkar-usls/DIVINE_REALM",
+  "canonical_outreach_state": {
+    "repository": "Hawkar-usls/SSlot",
+    "branch": "welfare-first-v0.1",
+    "path": ".janus/PLAYGRID_OUTREACH_STATE.json"
+  },
+  "policy": [
+    "DO_NOT_SEND_DUPLICATE_OUTREACH_WITHOUT_CHECKING_CANONICAL_STATE",
+    "GMAIL_SENT_OVERRIDES_CHAT_SUMMARY_FOR_SEND_STATUS",
+    "GITHUB_BRANCH_OVERRIDES_CHAT_SUMMARY_FOR_REPOSITORY_STATE"
+  ]
+}
