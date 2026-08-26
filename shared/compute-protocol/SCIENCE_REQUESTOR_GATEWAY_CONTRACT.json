@@ -1,0 +1,33 @@
+{
+  "schema": "janus.playgrid.science-requestor-gateway-contract.v1",
+  "protocol_version": "0.2.0",
+  "create_science_job": {
+    "method": "POST",
+    "path": "/v1/science/jobs",
+    "input": ["protocol_id", "protocol_version", "task.task_id", "task.type=SCIENCE_WORK_UNIT", "task.payload", "consent.consent_id", "consent.subject_id", "consent.cpu_limit_percent", "consent.gpu_enabled", "consent.allow_on_battery"],
+    "required_project_fields": ["research_requestor_id", "workload_id", "purpose", "upstream_verification_method"],
+    "output": {
+      "proof.kind": "SCIENCE_UPSTREAM_RECEIPT",
+      "proof.required_refs": ["research_requestor_id", "workload_id", "upstream_acceptance_status"],
+      "work.required": ["compute_seconds", "project", "completed"]
+    }
+  },
+  "optional_golem_bridge": {
+    "allowed": true,
+    "condition": "REAL_COMPATIBLE_SCIENTIFIC_REQUESTOR_EXISTS",
+    "browser_holds_yagna_app_key": false,
+    "golem_is_scientific_authority": false
+  },
+  "stop_job": {
+    "method": "POST",
+    "path": "/v1/science/jobs/stop",
+    "input": ["task_id"],
+    "requirement": "BEST_EFFORT_IMMEDIATE_STOP_AND_NO_NEW_WORK_AFTER_CONSENT_REVOKE"
+  },
+  "impact_accounting": {
+    "ledger": "IMPACT_LEDGER",
+    "upstream_acceptance_required": true,
+    "compute_hours_equal_medical_outcome": false
+  },
+  "game_authority": "NONE"
+}
