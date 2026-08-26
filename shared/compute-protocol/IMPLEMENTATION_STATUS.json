@@ -1,15 +1,16 @@
 {
-  "schema": "janus.compute-protocol.implementation-status.v3",
+  "schema": "janus.compute-protocol.implementation-status.v4",
   "protocol_id": "janus.welfare.compute-protocol",
-  "protocol_version": "0.2.0",
+  "protocol_version": "0.3.0",
   "routing_fabric_version": "0.1.0",
   "consumer": "Hawkar-usls/DIVINE_REALM",
-  "status": "SCIENCE_DEFAULT_BOUND_TO_AMORPHOUS_ROUTING_FABRIC",
+  "status": "SCIENCE_DEFAULT_BOUND_TO_GENERAL_AMORPHOUS_ROUTING_FABRIC",
   "default_route": "SCIENCE",
   "allowed_route_classes": ["SCIENCE", "PUBLIC_GOOD", "MARKETPLACE", "TREASURY", "DATACENTER", "OPERATOR", "CUSTOM"],
   "completed": [
-    "CONSUMER_BINDING_V3",
+    "CONSUMER_BINDING_V4",
     "EXPLICIT_CONSENT_POLICY",
+    "GENERAL_COMPUTE_COMPATIBILITY",
     "NO_RNG_RTP_REWARD_AUTHORITY",
     "ROUTE_WEIGHT_FROM_GAME_EVENT_FORBIDDEN",
     "PUBLIC_MAIN_ROUTE_SWITCHER",
@@ -22,16 +23,19 @@
     "REAL_SCIENTIFIC_REQUESTOR_REQUIRED_FOR_SCIENCE_CLAIM",
     "PUBLIC_OPERATOR_HANDOFF_SPEC"
   ],
+  "verification_pending": [
+    "EXECUTE_CURRENT_V0_3_CORE_PROTOCOL_TEST_SUITE",
+    "EXECUTE_ROUTING_FABRIC_TEST_SUITE",
+    "CI_CONFORMANCE_TEST"
+  ],
   "open_gates": [
     "REAL_SCIENCE_UPSTREAM_ADAPTER",
     "REAL_SCIENCE_RECEIPT_VERIFICATION",
     "REAL_COMPATIBLE_SCIENTIFIC_REQUESTOR",
     "REAL_GOLEM_YAGNA_ROUTE_OPTIONAL",
-    "REAL_DATACENTER_ROUTE_OPTIONAL",
+    "REAL_GENERAL_DATACENTER_OR_OPERATOR_ROUTE",
     "SIGNED_PROVIDER_MANIFEST_MODEL",
     "ENERGY_AND_THERMAL_TELEMETRY",
-    "EXECUTE_NEW_ROUTER_TEST_SUITE_AND_RECORD_RESULT",
-    "CI_CONFORMANCE_TEST",
     "DEDICATED_NEUTRAL_PROTOCOL_REPOSITORY"
   ],
   "deployment": "BLOCKED"
