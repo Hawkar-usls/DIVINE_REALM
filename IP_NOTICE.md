@@ -23,10 +23,27 @@ The public repository should contain only what is necessary to demonstrate the p
 
 Never commit partner secrets, medical/private data, or production credentials to this repository.
 
+## HELIOS ecosystem / acquisition boundary
+
+DIVINE_REALM is a specialized child in the JANUS HELIOS ecosystem. That relationship is architectural and commercial positioning; it is not an automatic assignment between repositories.
+
+Unless a signed definitive agreement expressly says otherwise:
+
+- a HELIOS licence or acquisition does not include DIVINE_REALM;
+- a DIVINE_REALM licence or acquisition does not include HELIOS, SSlot, the JANUS distributed swarm, the meta-registry, other JANUS repositories, future inventions, or seller general know-how;
+- links, shared naming, schemas, scientific-route concepts, or interoperability do not by themselves transfer IP;
+- scientific datasets, workload rights and partner permissions are separate assets and cannot be assumed transferable merely because the demo can describe or route a workload class.
+
+Any transaction involving DIVINE_REALM should identify the exact commit/tree snapshot, brand rights, background IP, source assets, documentation, dataset/workload rights if any, exclusions and transition obligations in writing.
+
 ## Partnership evaluation
 
-Prospective operators, aggregators, studios, scientific-compute projects, data centers, and technology partners may evaluate the public demo under `LICENSE.md`. Any production, white-label, hosted, commercial, distribution, scientific-workload, or integration right requires a separate written agreement and, where relevant, approval from the workload owner.
+Prospective operators, aggregators, studios, scientific-compute projects, data centers, and technology partners may evaluate the public demo under `LICENSE.md`. Any production, white-label, hosted, commercial, distribution, scientific-workload, or integration right requires a separate written agreement and, where relevant, approval from the workload/data owner.
 
 ## Regulatory and scientific boundary
 
-The current public build is a prototype. Real-money gambling, payments, compute monetization, mining, scientific-compute participation, medical use, or regulated deployment requires separate legal, security, platform-policy, scientific-partner, ethics, responsible-gaming, and jurisdiction-specific review.
+The current public build is a prototype. Real-money gambling, payments, compute monetization, mining, scientific-compute participation, medical use, or regulated deployment requires separate legal, security, privacy, data-rights, platform-policy, scientific-partner, ethics, responsible-gaming, and jurisdiction-specific review.
+
+## Buyer diligence rule
+
+A commercial acquirer should not infer production readiness, scientific validity, data rights, profitability, title to third-party material, trademark registration, or regulatory approval from public availability. Those matters require exact-snapshot diligence and definitive transaction documents.
